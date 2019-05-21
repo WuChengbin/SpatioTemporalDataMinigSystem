@@ -893,62 +893,9 @@ namespace MapVisualizationApp.GUI
                     (Const.PERPAGECOUNT * (EventPageNav.CurrentPage - 1)).ToString(),
                     Const.PERPAGECOUNT.ToString());
             }
-            Thread thread = new Thread(() =>
-             {
-                 List<Dictionary<string, string>> Nodes = new List<Dictionary<string, string>>();
-                 //转换为DataTable
-                 DataTable tempTable = new DataTable("Dataset");
-                 try
-                 {
-                     Nodes = Neo4j64.QueryNodeDataTable((string)CQL);
-                 }
-                 catch
-                 {
-                     Dispatcher.Invoke(new Action(delegate
-                     {
-                         this.IsAwaitShow = false;
-                     }));                      
-                     return;
-                 }
-                 List<String> Keys = new List<String>();
-                 Dispatcher.Invoke(new Action(delegate
-                 {
-                     {
-                         for (int i = 0; i < QDlg.listBox1.Items.Count; i++)
-                         {
-                             Keys.Add((QDlg.listBox1.Items[i] as PUListBoxItem).Content.ToString());
-                         }
-                     }
-                 }));
-                 if (Nodes != null)
-                 {
-                     Dispatcher.Invoke(new Action(delegate
-                     {
-                         tempTable = Convertor.MapNode2DataTable(Nodes, QDlg.mainForm.FieldsMap, Keys);
-                         if (tempTable != null)
-                         {
-                             (dataGridEvent.ItemsSource as DataView).Table.Rows.Clear();
-                             for (int i = 0; i < tempTable.Rows.Count; i++)
-                             {
-                                 (dataGridEvent.ItemsSource as DataView).Table.ImportRow(tempTable.Rows[i]);
-                             }                            
-                         }
-                         QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
-                         this.IsAwaitShow = false;
-                     }));
-                 }
-                 else
-                 {
-                     Dispatcher.Invoke(new Action(delegate
-                     {
-                         QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
-                         PUMessageBox.ShowDialog("未查询到数据！", "提示", Buttons.OK);
-                         this.IsAwaitShow = false;
-                     }));
-                 }
-             });
+            Thread thread = new Thread(new ParameterizedThreadStart(UpdateEventTable));           
             thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
+            thread.Start(CQL);
         }
 
         private void PUButton_Click(object sender, RoutedEventArgs e)
@@ -969,6 +916,21 @@ namespace MapVisualizationApp.GUI
                 OrderType = "ASC";
                 OrderBtn.ToolTip = "升序排列";
             }
+            string CQL = string.Empty;
+            if (SortComboBox.SelectedIndex > 0)
+            {
+                if (OrderCQLTemplate == string.Empty)
+                {
+                    OrderCQLTemplate = NonOrderCQLTemplate.Replace("SKIP {0} LIMIT {1}", "ORDER BY NODE.{0} {1} SKIP {2} LIMIT {3}");
+                }
+                CQL = string.Format(OrderCQLTemplate,
+                    SortComboBox.SelectedValue.ToString(),
+                    OrderType, (Const.PERPAGECOUNT * (EventPageNav.CurrentPage - 1)).ToString(),
+                    Const.PERPAGECOUNT.ToString());
+                Thread thread = new Thread(new ParameterizedThreadStart(UpdateEventTable));
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start(CQL);
+            }
         }
 
         private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -984,62 +946,63 @@ namespace MapVisualizationApp.GUI
                     SortComboBox.SelectedValue.ToString(),
                     OrderType, (Const.PERPAGECOUNT * (EventPageNav.CurrentPage - 1)).ToString(),
                     Const.PERPAGECOUNT.ToString());
-                Thread thread = new Thread(() =>
-                {
-                    List<Dictionary<string, string>> Nodes = new List<Dictionary<string, string>>();
-                    //转换为DataTable
-                    DataTable tempTable = new DataTable("Dataset");
-                    try
-                    {
-                        Nodes = Neo4j64.QueryNodeDataTable((string)CQL);
-                    }
-                    catch
-                    {
-                        Dispatcher.Invoke(new Action(delegate
-                        {
-                            this.IsAwaitShow = false;
-                        }));
-                        return;
-                    }
-                    List<String> Keys = new List<String>();
-                    Dispatcher.Invoke(new Action(delegate
-                    {
-                        {
-                            for (int i = 0; i < QDlg.listBox1.Items.Count; i++)
-                            {
-                                Keys.Add((QDlg.listBox1.Items[i] as PUListBoxItem).Content.ToString());
-                            }
-                        }
-                    }));
-                    if (Nodes != null)
-                    {
-                        Dispatcher.Invoke(new Action(delegate
-                        {
-                            tempTable = Convertor.MapNode2DataTable(Nodes, QDlg.mainForm.FieldsMap, Keys);
-                            if (tempTable != null)
-                            {
-                                (dataGridEvent.ItemsSource as DataView).Table.Rows.Clear();
-                                for (int i = 0; i < tempTable.Rows.Count; i++)
-                                {
-                                    (dataGridEvent.ItemsSource as DataView).Table.ImportRow(tempTable.Rows[i]);
-                                }
-                            }
-                            QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
-                            this.IsAwaitShow = false;
-                        }));
-                    }
-                    else
-                    {
-                        Dispatcher.Invoke(new Action(delegate
-                        {
-                            QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
-                            PUMessageBox.ShowDialog("未查询到数据！", "提示", Buttons.OK);
-                            this.IsAwaitShow = false;
-                        }));
-                    }
-                });
+                Thread thread = new Thread(new ParameterizedThreadStart(UpdateEventTable));
                 thread.SetApartmentState(ApartmentState.STA);
-                thread.Start();
+                thread.Start(CQL);
+            }
+        }
+        private void UpdateEventTable(object CQL)
+        {
+            List<Dictionary<string, string>> Nodes = new List<Dictionary<string, string>>();
+            //转换为DataTable
+            DataTable tempTable = new DataTable("Dataset");
+            try
+            {
+                Nodes = Neo4j64.QueryNodeDataTable((string)CQL);
+            }
+            catch
+            {
+                Dispatcher.Invoke(new Action(delegate
+                {
+                    this.IsAwaitShow = false;
+                }));
+                return;
+            }
+            List<String> Keys = new List<String>();
+            Dispatcher.Invoke(new Action(delegate
+            {
+                {
+                    for (int i = 0; i < QDlg.listBox1.Items.Count; i++)
+                    {
+                        Keys.Add((QDlg.listBox1.Items[i] as PUListBoxItem).Content.ToString());
+                    }
+                }
+            }));
+            if (Nodes != null)
+            {
+                Dispatcher.Invoke(new Action(delegate
+                {
+                    tempTable = Convertor.MapNode2DataTable(Nodes, QDlg.mainForm.FieldsMap, Keys);
+                    if (tempTable != null)
+                    {
+                        (dataGridEvent.ItemsSource as DataView).Table.Rows.Clear();
+                        for (int i = 0; i < tempTable.Rows.Count; i++)
+                        {
+                            (dataGridEvent.ItemsSource as DataView).Table.ImportRow(tempTable.Rows[i]);
+                        }
+                    }
+                    QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
+                    this.IsAwaitShow = false;
+                }));
+            }
+            else
+            {
+                Dispatcher.Invoke(new Action(delegate
+                {
+                    QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
+                    PUMessageBox.ShowDialog("未查询到数据！", "提示", Buttons.OK);
+                    this.IsAwaitShow = false;
+                }));
             }
         }
     }
