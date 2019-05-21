@@ -1,0 +1,199 @@
+﻿<pu:PUWindow x:Class="MapVisualizationApp.GUI.FeatureTable"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
+        mc:Ignorable="d"
+        Title="FeatureTable" Height="650.467" Width="1218.083" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized" NavbarBackground="#FF293956" Foreground="White" AllowAutoOwner="False" AllowForcingClose="True" AllowShowDelay="True" Closed="PUWindow_Closed" AnimationStyle="Scale">
+    <pu:PUWindow.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF28B8AD" Offset="1"/>
+            <GradientStop Color="#FF2B4E88" Offset="0.106"/>
+            <GradientStop Color="#FF219990" Offset="0.756"/>
+        </LinearGradientBrush>
+    </pu:PUWindow.Background>
+    <Grid>
+        <pu:PUTabControl x:Name="tabControl" Margin="172,0,0,20" Background="Transparent"  SelectedBrush="White" BorderBrush="#FF293A56" Foreground="#7FFFFFFF" FontWeight="Bold" SelectionChanged="TabControl_SelectionChanged">
+            <pu:PUTabItem Header="事件信息">
+                <Grid Background="#00E5E5E5" Margin="0,-2,0,0">
+                    <DataGrid x:Name="dataGridEvent"  HorizontalGridLinesBrush="#FFB2A5A5" VerticalGridLinesBrush="#FFB2A5A5" ContextMenuOpening="dataGridEvent_ContextMenuOpening" MouseDoubleClick="DataGridEvent_MouseDoubleClick" IsReadOnly="True"  AutoGenerateColumns="True" Background="#00F0F0F0" Foreground="#D8FFFFFF" ColumnWidth="*" FontWeight="Normal" FontSize="11" SelectionMode="Extended" Margin="5,4,5,29" BorderBrush="White" BorderThickness="2">
+                        <DataGrid.ContextMenu>
+                            <pu:PUContextMenu CoverBrush="#4C293A56"  Background="#CCFFFFFF">
+                                <pu:PUContextMenuItem Header="事件信息"  Click="MenuItem1_Click" FontSize="14" FontWeight="Bold">
+                                    <pu:PUContextMenuItem.Icon>
+                                        <Image Source="../ICONS/INFO_24px.png" Stretch="Uniform"></Image>
+                                    </pu:PUContextMenuItem.Icon>
+                                </pu:PUContextMenuItem>
+                                <pu:PUContextMenuItem Header="事件过程"  Click="MenuItem2_Click" FontSize="14" FontWeight="Bold">
+                                    <pu:PUContextMenuItem.Icon>
+                                        <Image Source="../ICONS/TIMER_24px.png" Stretch="Uniform"></Image>
+                                    </pu:PUContextMenuItem.Icon>
+                                </pu:PUContextMenuItem>
+                                <pu:PUContextMenuItem Header="事件序列"  Click="MenuItem3_Click" FontSize="14" FontWeight="Bold">
+                                    <pu:PUContextMenuItem.Icon>
+                                        <Image Source="../ICONS/POLYLINE_24px.png" Stretch="Uniform"></Image>
+                                    </pu:PUContextMenuItem.Icon>
+                                </pu:PUContextMenuItem>
+                                <pu:PUContextMenuItem Header="事件范围"  Click="MenuItem4_Click" FontSize="14" FontWeight="Bold">
+                                    <pu:PUContextMenuItem.Icon>
+                                        <Image Source="../ICONS/POLYGON_24px.png" Stretch="Uniform"></Image>
+                                    </pu:PUContextMenuItem.Icon>
+                                </pu:PUContextMenuItem>
+                            </pu:PUContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <!--设置边框笔刷（BorderBrush）-->
+                                <Setter Property="BorderBrush">
+                                    <!--值-->
+                                    <Setter.Value>
+                                        <!--色刷，Opacity：透明度-->
+                                        <SolidColorBrush Color="#FFB2A5A5"></SolidColorBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="Height" Value="25"/>
+                                <Setter Property="FontSize" Value="14"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Height" Value="35"/>
+                                <Setter Property="FontSize" Value="12"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#4C293A56"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#E5293A56"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
+                    <pu:PUPagingNav x:Name="EventPageNav" TotalPage="100" Height="24" VerticalAlignment="Bottom" Margin="5,0,0,3" HorizontalAlignment="Left" CurrentPageChanged="EventPageNav_CurrentPageChanged" Width="429"/>
+                    <pu:PUButton x:Name="OrderBtn" Margin="0,0,9,1" Click="PUButton_Click" Content="" BorderCornerRadius="3" ToolTip="升序排列"  VerticalAlignment="Bottom" HorizontalAlignment="Right" RenderTransformOrigin="0.5,0.5" Width="37" Height="27">
+                        <pu:PUButton.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="-1"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </pu:PUButton.RenderTransform>
+                        <pu:PUButton.Background>
+                            <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/ASC.png" Stretch="Uniform"/>
+                        </pu:PUButton.Background>
+                    </pu:PUButton>
+                    <pu:PUComboBox x:Name="SortComboBox" Margin="0,0,49,3" BorderCornerRadius="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="199" Height="24" SelectionChanged="SortComboBox_SelectionChanged">
+                        <pu:PUComboBoxItem Content="可选排序字段"/>
+                    </pu:PUComboBox>
+                </Grid>
+            </pu:PUTabItem>
+            <pu:PUTabItem Header="事件序列信息">
+                <Grid Background="#00E5E5E5">
+                    <DataGrid x:Name="dataGridSequence"  HorizontalGridLinesBrush="#FFB2A5A5" VerticalGridLinesBrush="#FFB2A5A5" AutoGenerateColumns="True" Background="#00F0F0F0" ColumnWidth="*" Foreground="#D8FFFFFF" FontWeight="Normal" FontSize="11" Margin="5,2,5,29" BorderBrush="White" BorderThickness="2">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <!--设置边框笔刷（BorderBrush）-->
+                                <Setter Property="BorderBrush">
+                                    <!--值-->
+                                    <Setter.Value>
+                                        <!--色刷，Opacity：透明度-->
+                                        <SolidColorBrush Color="#FFB2A5A5"></SolidColorBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="Height" Value="25"/>
+                                <Setter Property="FontSize" Value="14"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Height" Value="35"/>
+                                <Setter Property="FontSize" Value="12"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#4C293A56"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#E5293A56"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
+                    <pu:PUPagingNav x:Name="SequencePageNav" TotalPage="100" Height="24" VerticalAlignment="Bottom" Margin="5,0,0,2" HorizontalAlignment="Left" Width="429"/>
+                </Grid>
+            </pu:PUTabItem>
+            <pu:PUTabItem Header="事件详细信息">
+                <Grid Background="#00E5E5E5">
+                    <DataGrid x:Name="dataGridState"  HorizontalGridLinesBrush="#FFB2A5A5" VerticalGridLinesBrush="#FFB2A5A5" MouseDoubleClick="DataGridState_MouseDoubleClick" AutoGenerateColumns="True" Background="#00F0F0F0" ColumnWidth="*" Foreground="#D8FFFFFF" FontWeight="Normal" Margin="5,2,5,29" BorderBrush="White" BorderThickness="2">
+                        <DataGrid.ContextMenu>
+                            <pu:PUContextMenu CoverBrush="#4C293A56">
+                                <pu:PUContextMenuItem Header="在地图上显示" FontSize="14" FontWeight="Bold" Click="PUContextMenuItem_Click">
+                                    <pu:PUContextMenuItem.Icon>
+                                        <Image Source="../ICONS/MARK_24px.png" Stretch="Uniform"></Image>
+                                    </pu:PUContextMenuItem.Icon>
+                                </pu:PUContextMenuItem>
+                            </pu:PUContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <!--设置边框笔刷（BorderBrush）-->
+                                <Setter Property="BorderBrush">
+                                    <!--值-->
+                                    <Setter.Value>
+                                        <!--色刷，Opacity：透明度-->
+                                        <SolidColorBrush Color="#FFB2A5A5"></SolidColorBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="Height" Value="25"/>
+                                <Setter Property="FontSize" Value="14"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Height" Value="35"/>
+                                <Setter Property="FontSize" Value="12"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#4C293A56"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#E5293A56"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                    </DataGrid>
+                    <pu:PUPagingNav x:Name="StateePageNav" TotalPage="100" Height="24" VerticalAlignment="Bottom" Margin="5,0,0,2" HorizontalAlignment="Left" Width="429"/>
+                </Grid>
+            </pu:PUTabItem>
+        </pu:PUTabControl>
+        <pu:PUTreeView x:Name="Menu" Width="172" HorizontalAlignment="Left" Background="White" Foreground="#A5FFFFFF" BorderThickness="4,0,4,4" BorderBrush="#FF293A56" CoverBrush="#3352B1DD" ChoosedBrush="#2F52B1DD" FontWeight="Bold">
+            <pu:PUTreeViewItem Header="文件" Width="162" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
+                <pu:PUTreeViewItem Header="  导出" PreviewMouseUp="MenuItem_Click"/>
+            </pu:PUTreeViewItem>
+            <pu:PUTreeViewItem Header="统计" Width="162" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
+                <pu:PUTreeViewItem Header="  源地统计"></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="  消亡地统计"></pu:PUTreeViewItem>
+            </pu:PUTreeViewItem>
+            <pu:PUTreeViewItem Header="退出"  Width="162" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3" PreviewMouseUp="MenuItem_Click_1"></pu:PUTreeViewItem>
+        </pu:PUTreeView>
+        <StatusBar VerticalAlignment="Bottom" Height="20" Margin="172,0,0,0" Background="#FF007ACC" Foreground="White">
+            <StatusBarItem x:Name="StatusTableInfo" Content="事件数量统计：" Height="20" VerticalAlignment="Top"/>
+        </StatusBar>
+    </Grid>
+</pu:PUWindow>

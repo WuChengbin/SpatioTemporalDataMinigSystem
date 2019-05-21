@@ -1,0 +1,14 @@
+﻿<pu:PUWindow x:Class="MapVisualizationApp.GUI.UserGuideDlg"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MapVisualizationApp.GUI"
+        xmlns:pu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
+        xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+        mc:Ignorable="d"
+        Title="帮助" Height="622.525" Width="1050" AllowAutoOwner="True" WindowStartupLocation="CenterOwner" NavbarBackground="#FF293956" NavbarHeight="30" AnimationStyle="Scale" Foreground="White">
+    <Grid>
+        <cefSharp:ChromiumWebBrowser x:Name="browser"></cefSharp:ChromiumWebBrowser>
+    </Grid>
+</pu:PUWindow>

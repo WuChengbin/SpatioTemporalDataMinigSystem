@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <Field NAME="PRID" DataType="INT" Chinese="过程编号"></Field>
+  <Field NAME="SQID" DataType="STRING" Chinese="序列编号"></Field>
+  <Field NAME="STID" DataType="STRING" Chinese="状态编号"></Field>
+  <Field NAME="Trajectory" DataType="INT" Chinese="轨迹聚类编号"></Field>
+  <Field NAME="STime" DataType="DATETIME" Chinese="开始时间"></Field>
+  <Field NAME="ETime" DataType="DATETIME" Chinese="结束时间"></Field>
+  <Field NAME="Time" DataType="DATETIME" Chinese="发生时间"></Field>
+  <Field NAME="DurTime" DataType="DOUBLE" Chinese="持续时间"></Field>
+  <Field NAME="Theta" DataType="DOUBLE" Chinese="方向"></Field>
+  <Field NAME="AvgValue" DataType="DOUBLE" Chinese="平均值"></Field>
+  <Field NAME="MinValue" DataType="DOUBLE" Chinese="最小值"></Field>
+  <Field NAME="MaxValue" DataType="DOUBLE" Chinese="最大值"></Field>
+  <Field NAME="MinLon" DataType="DOUBLE" Chinese="最小经度"></Field>
+  <Field NAME="MaxLon" DataType="DOUBLE" Chinese="最大经度"></Field>
+  <Field NAME="MinLat" DataType="DOUBLE" Chinese="最小纬度"></Field>
+  <Field NAME="MaxLat" DataType="DOUBLE" Chinese="最大纬度"></Field>
+  <Field NAME="Power" DataType="INT" Chinese="强度"></Field>
+  <Field NAME="MinPower" DataType="DOUBLE" Chinese="最小强度"></Field>
+  <Field NAME="MaxPower" DataType="DOUBLE" Chinese="最大强度"></Field>
+  <Field NAME="SumPower" DataType="DOUBLE" Chinese="总强度"></Field>
+  <Field NAME="Volume" DataType="DOUBLE" Chinese="体积"></Field>
+  <Field NAME="TotalVolume" DataType="DOUBLE" Chinese="总体积"></Field>
+  <Field NAME="CoreLon" DataType="DOUBLE" Chinese="质心经度"></Field>
+  <Field NAME="CoreLat" DataType="DOUBLE" Chinese="质心纬度"></Field>
+  <Field NAME="Area" DataType="DOUBLE" Chinese="面积"></Field>
+  <Field NAME="MaxArea" DataType="DOUBLE" Chinese="最大面积"></Field>
+  <Field NAME="SumArea" DataType="DOUBLE" Chinese="总面积"></Field>
+  <Field NAME="AbnormalType" DataType="STRING" Chinese="异常类型"></Field>
+  <Field NAME="StateType" DataType="INT" Chinese="状态类型"></Field>
+  <Field NAME="ParentsID" DataType="STRING" Chinese="父节点"></Field>
+  <Field NAME="ChildrenID" DataType="STRING" Chinese="子节点"></Field>
+  <Field NAME="gtype" DataType="INT" Chinese="几何类型"></Field>
+  <Field NAME="bbox" DataType="STRING" Chinese="外接矩形"></Field>
+  <Field NAME="SeqType" DataType="STRING" Chinese="序列类型"></Field>
+</configuration>

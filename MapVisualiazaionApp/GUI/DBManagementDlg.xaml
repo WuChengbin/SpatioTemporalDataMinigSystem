@@ -1,0 +1,356 @@
+﻿<pu:PUWindow x:Class="MapVisualizationApp.GUI.DBManagementDlg"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MapVisualizationApp.GUI"
+        xmlns:pu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
+        mc:Ignorable="d"
+        Title="Neo4j管理系统" Height="517" Width="757" ResizeMode="CanMinimize" WindowStartupLocation="CenterOwner" NavbarBackground="#FF293956" Foreground="#FFFFFF" Closing="PUWindow_Closing">
+    <pu:PUWindow.Background>
+        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+            <GradientStop Color="#FF34B8AD" Offset="1"/>
+            <GradientStop Color="#FF2B4E88" Offset="0.097"/>
+            <GradientStop Color="#FF29B8AD" Offset="0.893"/>
+        </LinearGradientBrush>
+    </pu:PUWindow.Background>
+    <pu:PUWindow.Icon>
+        <Image Source="../ICONS/neo4j.png"></Image>
+    </pu:PUWindow.Icon>
+    <pu:PUTabControl x:Name="OptionTab" Background="#00000000" SelectedBrush="White"  Foreground="#B29C9999" FontWeight="Bold" SelectionChanged="PUTabControl_SelectionChanged">
+        <pu:PUTabItem Header="数据更新">
+            <Grid Background="#00000000">
+                <pu:PUTabControl x:Name="ProcessTab" TabStripPlacement="Left" Background="#00000000" SelectedBrush="White"  Foreground="#B29C9999" FontWeight="Bold" SelectionChanged="ProcessTab_SelectionChanged" >
+                    <pu:PUTabItem Header="第一步">
+                        <Grid>
+                            <pu:PUTabControl x:Name="ImportTabl" Background="Transparent" TabStripPlacement="Bottom" SelectionChanged="PUTabControl_SelectionChanged_2">
+                                <pu:PUTabItem Header="增量导入">
+                                    <Grid>
+                                        <Label  Content="矢量数据导入:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="39" Width="680" Foreground="White"/>
+                                        <DataGrid x:Name="LayerInfoTable"  HorizontalGridLinesBrush="#FFB2A5A5" VerticalGridLinesBrush="#FFB2A5A5" AutoGenerateColumns="True" Background="#00F0F0F0" ColumnWidth="*" Foreground="#D8FFFFFF" FontWeight="Normal" FontSize="14" Margin="0,28,0,122" BorderBrush="White">
+                                            <DataGrid.ColumnHeaderStyle>
+                                                <Style TargetType="{x:Type DataGridColumnHeader}">
+                                                    <!--设置边框笔刷（BorderBrush）-->
+                                                    <Setter Property="BorderBrush">
+                                                        <!--值-->
+                                                        <Setter.Value>
+                                                            <!--色刷，Opacity：透明度-->
+                                                            <SolidColorBrush Color="#FFB2A5A5"></SolidColorBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="BorderThickness" Value="1"/>
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="Height" Value="25"/>
+                                                    <Setter Property="FontSize" Value="14"/>
+                                                </Style>
+                                            </DataGrid.ColumnHeaderStyle>
+
+                                            <DataGrid.RowStyle>
+                                                <Style TargetType="DataGridRow">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="Height" Value="35"/>
+                                                    <Setter Property="FontSize" Value="12"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#4C293A56"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsSelected" Value="True">
+                                                            <Setter Property="Background" Value="#E5293A56"/>
+                                                            <Setter Property="Foreground" Value="White"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </DataGrid.RowStyle>
+                                        </DataGrid>
+                                        <Label Content="矢量数据路径:" Margin="3,300,557,84" Foreground="White"/>
+                                        <pu:PUTextBox x:Name="ShpFileIncreamentTextBox"  Margin="109,300,66,86" Background="#99FFFFFF" BorderCornerRadius="3"/>
+                                        <pu:PUButton Margin="606,299,2,86" Content="" BorderCornerRadius="3" Click="PUButton_Click_28">
+                                            <pu:PUButton.Background>
+                                                <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/FOLDER_48px.png" Stretch="Uniform"/>
+                                            </pu:PUButton.Background>
+                                        </pu:PUButton>
+                                        <pu:PUTextBox x:Name="LayerIncreamentTextBox"  Margin="108,346,66,40" Background="#99FFFFFF" BorderCornerRadius="3" RenderTransformOrigin="0.5,0.5">
+                                            <pu:PUTextBox.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform AngleY="-0.233"/>
+                                                    <RotateTransform/>
+                                                    <TranslateTransform Y="-0.996"/>
+                                                </TransformGroup>
+                                            </pu:PUTextBox.RenderTransform>
+                                        </pu:PUTextBox>
+                                        <Label Content="数据图层名:" Margin="3,347,557,39" Foreground="White"/>
+                                        <Label x:Name="ShpProgressLabel" Content="" Margin="311,383,201,3" Foreground="White"/>
+                                        <pu:PUButton Margin="577,388,10,8" x:Name="ImpIncreamentBtn" Content="导入" BorderCornerRadius="3" Click="ImpIncreamentBtn_Click" />
+                                        <pu:PUButton Margin="482,388,105,8" Content="删除" BorderCornerRadius="3" Click="PUButton_Click_29"/>
+                                        <pu:PUProgressBar x:Name="IncreamentProgressBar" IsPercentShow="True" Width="303" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="White" Margin="3,0,0,8" FontSize="10" BorderCornerRadius="3" Visibility="Hidden"/>
+                                    </Grid>
+
+                                </pu:PUTabItem>
+                                <pu:PUTabItem Header="批量导入">
+                                    <Grid Background="#00000000">
+                                        <pu:PUTextBox x:Name="DBFileTextBox"  Margin="127,37,67,348" IsReadOnly="True" Background="#99FFFFFF" BorderCornerRadius="3"></pu:PUTextBox>
+                                        <Label Content="数据库路径:" Margin="10,38,550,347" Foreground="White"/>
+                                        <Label Content="输出信息:" Margin="10,200,0,189" Foreground="White"/>
+                                        <pu:PUTextBox x:Name="ShpFileTextBox"  Margin="127,95,67,289" IsReadOnly="True" Background="#99FFFFFF" BorderCornerRadius="3"></pu:PUTextBox>
+                                        <Label Content="矢量数据路径:" Margin="10,98,550,286" Foreground="White"/>
+                                        <pu:PUTextBox x:Name="LayerTextBox"  Margin="127,153,67,233" Background="#99FFFFFF" BorderCornerRadius="3"></pu:PUTextBox>
+                                        <Label Content="数据图层名:" Margin="10,154,550,232" Foreground="White"/>
+                                        <TextBox x:Name="ConsoleTextBox" Margin="10,244,10,31" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" UndoLimit="0" Background="#99FFFFFF" IsReadOnly="True" FontWeight="Normal" />
+                                        <pu:PUButton Margin="605,37,3,348" Content="" BorderCornerRadius="3" Click="PUButton_Click_1">
+                                            <pu:PUButton.Background>
+                                                <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/FOLDER_48px.png" Stretch="Uniform"/>
+                                            </pu:PUButton.Background>
+                                        </pu:PUButton>
+                                        <pu:PUButton Margin="605,95,3,289" Content="" BorderCornerRadius="3" Click="PUButton_Click_2">
+                                            <pu:PUButton.Background>
+                                                <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/FOLDER_48px.png" Stretch="Uniform"/>
+                                            </pu:PUButton.Background>
+                                        </pu:PUButton>
+                                        <pu:PUButton Margin="577,388,10,8" x:Name="ImpBtn" Content="导入" BorderCornerRadius="3" Click="PUButton_Click"/>
+                                        <pu:PUButton Margin="482,388,105,8" Content="取消" BorderCornerRadius="3" Click="PUButton_Click_4"/>
+                                        <pu:PUButton Margin="10,388,516,8" Content="清除信息" BorderCornerRadius="3" Click="PUButton_Click_3"/>
+                                        <Label x:Name="label6" Content="矢量数据导入:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="39" Width="680" Foreground="White"/>
+                                    </Grid>
+                                </pu:PUTabItem>
+                            </pu:PUTabControl>
+                        </Grid>
+
+                    </pu:PUTabItem>
+                    <pu:PUTabItem Header="第二步" >
+                        <Grid Margin="10,0,0,0">
+                            <Grid.Background>
+                                <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/Structure.png" Stretch="Uniform"/>
+                            </Grid.Background>
+                            <Label x:Name="label3" Content="标签更新：&#13;&#13;步骤:&#13;&#13;       (1) 选择图层&#13;&#13;       (2) 设置标签名" HorizontalAlignment="Left" Margin="-11,0,0,0" VerticalAlignment="Top" Height="158" Width="213" Foreground="White"/>
+                            <pu:PUButton Content="确定" Margin="494,409,10,10" BorderCornerRadius="3" Click="PUButton_Click_14" ></pu:PUButton>
+                            <pu:PUButton Content="删除" Margin="330,409,174,10" BorderCornerRadius="3" Click="PUButton_Click_15"/>
+
+                            <pu:PUButton Content="Layer" Margin="130,215,467,201" FontSize="14" Foreground="White" Background="#00DDDDDD" ButtonStyle="Link" Click="PUButton_Click_19"></pu:PUButton>
+                            <Label Content="备注：标签名为所选图层上数据节点的标签" HorizontalAlignment="Left" Margin="-9,410,0,-40" Width="339" Foreground="#D8FF0000" FontSize="12" />
+                            <pu:PUBubble x:Name="LayerBubble" Margin="202,212,227,192" BorderCornerRadius="6" Background="#CCFFFFFF" CoverBrush="#CCFFFFFF" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Hidden">
+                                <Grid Height="130" Width="317" >
+                                    <pu:PUComboBox x:Name="LayerComboBox"  BorderCornerRadius="3" Background="#B2FFFFFF" SelectionChanged="LayerComboBox_SelectionChanged" Margin="-2,1,110,98">
+                                        <pu:PUComboBoxItem Content="选择图层"></pu:PUComboBoxItem>
+                                    </pu:PUComboBox>
+                                </Grid>
+                            </pu:PUBubble>
+                            <pu:PUBubble x:Name="LabelBubble" Margin="495,58,9,316" BorderCornerRadius="6" Background="#CCFFFFFF" CoverBrush="#CCFFFFFF" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" AnglePosition="BottomCenter" Visibility="Hidden">
+                                <Grid Height="42" Width="88" >
+                                    <Label x:Name="label2" Content="标签名：" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="Black" Margin="-6,-1,0,0"/>
+                                    <pu:PUTextBox x:Name="NodeLabel"  BorderCornerRadius="3" Background="#B2FFFFFF" Margin="-3,20,-48,-20"/>
+                                    <pu:PUButton Content="命名规则"  ButtonStyle="Hollow" FontSize="11" Click="PUButton_Click_16" Margin="76,3,-47,21" BorderCornerRadius="3" ></pu:PUButton>
+                                </Grid>
+                            </pu:PUBubble>
+                        </Grid>
+                    </pu:PUTabItem>
+                    <pu:PUTabItem Header="第三步">
+                        <Grid Margin="10,1,9,39" >
+                            <Grid.Background>
+                                <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/RELATION.png" Stretch="Uniform"/>
+                            </Grid.Background>
+                            <pu:PUButton x:Name="EtSeqDelBtn" Content="" Margin="182,114,443,266" BorderCornerRadius="6" ToolTip="删除事件-序列关系"  Click="EtSeqDelBtn_Click">
+                                <pu:PUButton.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="-25.779"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </pu:PUButton.RenderTransform>
+
+                                <pu:PUButton.Background>
+                                    <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/DELETE_16px.png" Stretch="None"/>
+                                </pu:PUButton.Background>
+                            </pu:PUButton>
+                            <pu:PUButton x:Name="SeqSeqDelBtn" Content="" Margin="180,158,445,222" BorderCornerRadius="6" ToolTip="删除序列-序列关系" Click="SeqSeqDelBtn_Click">
+                                <pu:PUButton.Background>
+                                    <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/DELETE_16px.png" Stretch="None"/>
+                                </pu:PUButton.Background>
+                            </pu:PUButton>
+                            <pu:PUButton x:Name="SeqStDelBtn" Content="" Margin="37,218,588,162" BorderCornerRadius="6" ToolTip="删除序列-状态关系" RenderTransformOrigin="0.5,0.5" Click="SeqStDelBtn_Click">
+                                <pu:PUButton.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="24.699"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </pu:PUButton.RenderTransform>
+                                <pu:PUButton.Background>
+                                    <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/DELETE_16px.png" Stretch="None"/>
+                                </pu:PUButton.Background>
+                            </pu:PUButton>
+                            <pu:PUButton x:Name="StStDelBtn" Content="" Margin="57,289,568,91" BorderCornerRadius="6" ToolTip="删除状态-状态关系" Click="StStDelBtn_Click">
+                                <pu:PUButton.Background>
+                                    <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/DELETE_16px.png" Stretch="None"/>
+                                </pu:PUButton.Background>
+                            </pu:PUButton>
+                            <Label x:Name="label4" Content="备注：批量更新时所有CSV文件需放入服务器端数据库import目录下,输入相对路径" HorizontalAlignment="Left" Margin="-9,410,0,-40" Width="677" Foreground="#D8FF0000" FontSize="12" />
+                            <Label  Content="创建关系：" HorizontalAlignment="Left" Margin="-11,0,0,0" VerticalAlignment="Top" Height="37" Width="213" Foreground="White"/>
+                            <pu:PUButton x:Name="EventBtn"  Content="Event" Margin="262,51,329,331" ButtonStyle="Link" FontSize="14" Background="Transparent" Foreground="White" Click="EventBtn_Click"></pu:PUButton>
+                            <pu:PUButton x:Name="SeqtBtn"  Content="Sequence" Margin="43,144,526,238" ButtonStyle="Link" FontSize="14" Background="Transparent" Foreground="White" Click="SeqtBtn_Click"></pu:PUButton>
+                            <pu:PUButton x:Name="StateBtn"  Content="State" Margin="-9,275,600,107" ButtonStyle="Link" FontSize="14" Background="Transparent" Foreground="White" Click="StateBtn_Click"></pu:PUButton>
+                            <pu:PUBubble x:Name="EventBubble" Margin="341,23,72,301" BorderCornerRadius="6" Background="#CCFFFFFF" CoverBrush="#CCFFFFFF" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Hidden">
+                                <Grid Height="130" Width="317" >
+                                    <pu:PUComboBox x:Name="EventLabelComboBox" Margin="0,0,108,99" BorderCornerRadius="3" SelectionChanged="EventLabelComboBox_SelectionChanged">
+                                        <pu:PUComboBoxItem Content="选择事件节点">
+
+                                        </pu:PUComboBoxItem>
+                                    </pu:PUComboBox>
+                                    <pu:PUComboBox x:Name="EventIDComboBox" Margin="0,36,108,63" BorderCornerRadius="3">
+                                        <pu:PUComboBoxItem Content="选择关联字段">
+
+                                        </pu:PUComboBoxItem>
+                                    </pu:PUComboBox>
+                                </Grid>
+                            </pu:PUBubble>
+                            <pu:PUBubble x:Name="SeqtBubble" Margin="0,29,419,262" BorderCornerRadius="6" Background="#CCFFFFFF" CoverBrush="#CCFFFFFF" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" AnglePosition="BottomCenter" Visibility="Hidden">
+                                <Grid Height="155" Width="317" >
+                                    <pu:PUComboBox x:Name="SeqLabelComboBox" Margin="0,0,111,124" BorderCornerRadius="3" SelectionChanged="SeqLabelComboBox_SelectionChanged">
+                                        <pu:PUComboBoxItem Content="选择序列节点">
+
+                                        </pu:PUComboBoxItem>
+                                    </pu:PUComboBox>
+                                    <pu:PUComboBox x:Name="SeqIDComboBox" Margin="0,36,111,88" BorderCornerRadius="3">
+                                        <pu:PUComboBoxItem Content="选择关联字段">
+
+                                        </pu:PUComboBoxItem>
+                                    </pu:PUComboBox>
+                                    <pu:PUTextBox x:Name="SeqSeqFileTextBox" Margin="0,72,172,55" BorderCornerRadius="3" FontSize="12"/>
+                                    <pu:PUButton Content="" Margin="150,72,111,55" BorderCornerRadius="3" ToolTip="打开序列-序列关系文件" CoverBrush="#33000000" Click="PUButton_Click_17" >
+                                        <pu:PUButton.Background>
+                                            <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/FOLDER_48px.png" Stretch="Uniform"/>
+                                        </pu:PUButton.Background>
+                                    </pu:PUButton>
+                                </Grid>
+                            </pu:PUBubble>
+
+                            <pu:PUBubble x:Name="StateBubble" Margin="39,233,374,62" BorderCornerRadius="6" Background="#CCFFFFFF" CoverBrush="#CCFFFFFF" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Visibility="Hidden">
+                                <Grid Height="130" Width="317" >
+
+                                    <pu:PUComboBox x:Name="StLabelComboBox" Margin="0,0,108,99" BorderCornerRadius="3" SelectionChanged="StLabelComboBox_SelectionChanged">
+                                        <pu:PUComboBoxItem  Content="选择状态节点">
+
+                                        </pu:PUComboBoxItem>
+                                    </pu:PUComboBox>
+                                    <pu:PUComboBox x:Name="StIDComboBox" Margin="0,36,108,63" BorderCornerRadius="3">
+                                        <pu:PUComboBoxItem Content="选择关联字段">
+
+                                        </pu:PUComboBoxItem>
+                                    </pu:PUComboBox>
+                                    <pu:PUTextBox x:Name="StStFileTextBox" Margin="0,72,169,31" BorderCornerRadius="3" FontSize="12"/>
+                                    <pu:PUButton Content="" Margin="153,73,108,30" BorderCornerRadius="3" ToolTip="打开状态-状态关系文件" CoverBrush="#33000000" Click="PUButton_Click_20" >
+                                        <pu:PUButton.Background>
+                                            <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/FOLDER_48px.png" Stretch="Uniform"/>
+                                        </pu:PUButton.Background>
+                                    </pu:PUButton>
+                                </Grid>
+                            </pu:PUBubble>
+                            <pu:PUButton Content="增量导入" Margin="516,380,4,2" BorderCornerRadius="3" Click="PUButton_Click_21"></pu:PUButton>
+                            <pu:PUButton Content="批量导入" Margin="516,413,4,-31" BorderCornerRadius="3" Click="PUButton_Click_18"></pu:PUButton>
+                            <pu:PUProgressBar x:Name="RelProgressBar" ProgressBarStyle="Ring" BorderThickness="3" IsPercentShow="True" Width="40" Height="40" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="White" Visibility="Hidden"/>
+                            <Label x:Name="labelProgress" Content="" HorizontalAlignment="Left" Margin="50,377,0,0" VerticalAlignment="Top" Width="461" Foreground="White" Height="33"/>
+                        </Grid>
+                    </pu:PUTabItem>
+                    <pu:PUTabItem Header="第四步">
+                        <Grid Margin="10,0,11,0">
+                            <Grid.Background>
+                                <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/TYPE.png" Stretch="Uniform"/>
+                            </Grid.Background>
+                            <pu:PUButton Content="确定" Margin="494,409,-1,10" BorderCornerRadius="3" Click="PUButton_Click_22" ></pu:PUButton>
+                            <pu:PUButton Content="删除" Margin="330,409,163,10" BorderCornerRadius="3" Click="PUButton_Click_23"/>
+                            <pu:PUComboBox x:Name="LabelRelComboBox" Margin="79,263,393,156" BorderCornerRadius="3">
+                                <pu:PUComboBoxItem Content="选择节点"></pu:PUComboBoxItem>
+                            </pu:PUComboBox>
+                            <Label Content="节点标签：" Margin="3,261,557,158" Foreground="White" />
+                            <Label  Content="计算节点状态（可选）：" HorizontalAlignment="Left" Margin="-11,1,0,0" VerticalAlignment="Top" Height="37" Width="213" Foreground="White"/>
+                        </Grid>
+                    </pu:PUTabItem>
+                </pu:PUTabControl>
+
+            </Grid>
+        </pu:PUTabItem>
+        <pu:PUTabItem Header="索引更新">
+            <Grid>
+                <pu:PUComboBox x:Name="LabelsCombBox" Margin="85,10,476,411"  BorderCornerRadius="5" FontWeight="Normal" SelectionChanged="LabelsCombBox_SelectionChanged"/>
+                <pu:PUListBox x:Name="AllFieldsList" Margin="10,40,476,10" Background="#99FFFFFF" FontWeight="Normal" SelectionMode="Multiple"/>
+                <pu:PUListBox x:Name="IndexFieldsList" Margin="372,40,114,10" FontWeight="Normal" Background="#99FFFFFF" SelectionMode="Multiple"/>
+                <Label x:Name="label" Content="已创建索引：等待索引加载中..." HorizontalAlignment="Left" Margin="372,10,0,0" VerticalAlignment="Top" Width="259" Foreground="White"/>
+                <pu:PUButton Content=" &gt;" Margin="279,185,384,237" Click="PUButton_Click_5" BorderCornerRadius="3"  Foreground="White"></pu:PUButton>
+                <pu:PUButton Content="&gt;&gt;" Margin="279,246,384,176" Click="PUButton_Click_6" BorderCornerRadius="3"  Foreground="White"></pu:PUButton>
+                <pu:PUButton Content="删除选中" Margin="639,359,7,57" Click="PUButton_Click_7" BorderCornerRadius="3"></pu:PUButton>
+                <pu:PUButton Content="删除所有" Margin="639,42,7,374" Click="PUButton_Click_8" BorderCornerRadius="3" Foreground="#FFCA5100"></pu:PUButton>
+                <pu:PUButton Content="保存更改" Margin="639,404,7,12" Click="PUButton_Click_9" BorderCornerRadius="3"></pu:PUButton>
+                <Label x:Name="label1" Content="数据节点：" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="White"/>
+            </Grid>
+        </pu:PUTabItem>
+        <pu:PUTabItem Header="用户更新">
+            <Grid>
+                <DataGrid x:Name="UserInfoTable"  HorizontalGridLinesBrush="#FFB2A5A5" VerticalGridLinesBrush="#FFB2A5A5" AutoGenerateColumns="True" Background="#00F0F0F0" ColumnWidth="*" Foreground="#D8FFFFFF" FontWeight="Normal" FontSize="14" Margin="0,0,0,164" BorderBrush="White">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <!--设置边框笔刷（BorderBrush）-->
+                            <Setter Property="BorderBrush">
+                                <!--值-->
+                                <Setter.Value>
+                                    <!--色刷，Opacity：透明度-->
+                                    <SolidColorBrush Color="#FFB2A5A5"></SolidColorBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="Height" Value="25"/>
+                            <Setter Property="FontSize" Value="14"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Height" Value="35"/>
+                            <Setter Property="FontSize" Value="12"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#4C293A56"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#E5293A56"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                </DataGrid>
+                <Label x:Name="label5" Content="用户：" Margin="0,294,602,120" Foreground="White"/>
+                <pu:PUComboBox x:Name="UserComboBox"  Margin="93,296,435,127" BorderCornerRadius="3" SelectionChanged="UserComboBOx_SelectionChanged">
+                    <pu:PUComboBoxItem Content="创建用户"></pu:PUComboBoxItem>
+                </pu:PUComboBox>
+                <Label Content="用户名：" Margin="0,329,589,85" Foreground="White"/>
+                <pu:PUTextBox x:Name="UserTextBox"  Margin="93,330,435,84" BorderCornerRadius="3"></pu:PUTextBox>
+                <Label Content="角色组：" Margin="345,298,265,116" Foreground="White"/>
+                <Label Content="密码：" Margin="0,371,602,43" Foreground="White"/>
+                <pu:PUPasswordBox x:Name="PwdTextBox"  Margin="93,372,435,48" BorderCornerRadius="3" IsShowPwdButtonShow="True"></pu:PUPasswordBox>
+                <Label Content="密码确认：" Margin="0,408,569,6" Foreground="White"/>
+                <pu:PUPasswordBox x:Name="RePwdTextBox"  Margin="93,408,435,12" BorderCornerRadius="3" IsShowPwdButtonShow="True"></pu:PUPasswordBox>
+                <pu:PUCheckBox x:Name="AdminCheckBox"  Content="Admin" Margin="409,300,0,120" HorizontalAlignment="Left" Width="109" FontSize="11"></pu:PUCheckBox>
+                <pu:PUCheckBox x:Name="ReaderCheckBox"  Content="Reader" Margin="507,300,0,120" HorizontalAlignment="Left" Width="109" FontSize="11"></pu:PUCheckBox>
+                <pu:PUCheckBox x:Name="PublisherCheckBox"  Content="Publisher" Margin="621,300,0,120" HorizontalAlignment="Left" Width="109" FontSize="11"></pu:PUCheckBox>
+                <pu:PUCheckBox x:Name="ArchitectCheckBox"  Content="Architect" Margin="409,339,0,81" HorizontalAlignment="Left" Width="109" FontSize="11"></pu:PUCheckBox>
+                <Label x:Name="UserStateLabel" Content="用户状态：待创建" Margin="345,373,15,41" Foreground="White"/>
+                <pu:PUButton x:Name="SaveBtn" Content="保存修改" Margin="555,409,10,10" BorderCornerRadius="3" Click="SaveBtn_Click"></pu:PUButton>
+                <pu:PUButton x:Name="CreateBtn" Content="创建用户" Margin="369,409,195,10" BorderCornerRadius="3" Click="PUButton_Click_27"/>
+                <pu:PUButton x:Name="SuspendBtn" Content="停用" Margin="518,378,135,49" BorderCornerRadius="3" ButtonStyle="Hollow" Click="SuspendBtn_Click"></pu:PUButton>
+            </Grid>
+        </pu:PUTabItem>
+        <pu:PUTabItem Header="Neo4j控制台">
+            <Grid>
+                <TextBox x:Name="NeoConsoleText" Background="#4CFFFFFF" KeyDown="NeoConsoleText_KeyDown" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Foreground="White" FontSize="14" Margin="0,0,0,31"/>
+                <pu:PUButton Content="关闭数据库" Margin="540,421,106,8" FontSize="12"  BorderCornerRadius="3" Width="80" Click="PUButton_Click_12" ></pu:PUButton>
+                <pu:PUButton Content="打开数据库" Margin="644,421,2,8" FontSize="12"  BorderCornerRadius="3" Width="80" Click="PUButton_Click_13" ></pu:PUButton>
+                <pu:PUButton Content="清空控制台" Margin="0,421,646,8" FontSize="12"  BorderCornerRadius="3" Width="80" Click="PUButton_Click_10" ></pu:PUButton>
+                <pu:PUButton Content="数据库状态" Margin="104,421,542,8" FontSize="12"  BorderCornerRadius="3" Width="80" Click="PUButton_Click_11" ></pu:PUButton>
+            </Grid>
+        </pu:PUTabItem>
+    </pu:PUTabControl>
+</pu:PUWindow>
