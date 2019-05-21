@@ -178,13 +178,13 @@
                             </Style>
                         </DataGrid.RowStyle>
                     </DataGrid>
-                    <pu:PUPagingNav x:Name="StateePageNav" TotalPage="100" Height="24" VerticalAlignment="Bottom" Margin="5,0,0,2" HorizontalAlignment="Left" Width="429"/>
+                    <pu:PUPagingNav x:Name="StatePageNav" TotalPage="100" Height="24" VerticalAlignment="Bottom" Margin="5,0,0,2" HorizontalAlignment="Left" Width="429"/>
                 </Grid>
             </pu:PUTabItem>
         </pu:PUTabControl>
         <pu:PUTreeView x:Name="Menu" Width="172" HorizontalAlignment="Left" Background="White" Foreground="#A5FFFFFF" BorderThickness="4,0,4,4" BorderBrush="#FF293A56" CoverBrush="#3352B1DD" ChoosedBrush="#2F52B1DD" FontWeight="Bold">
             <pu:PUTreeViewItem Header="文件" Width="162" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
-                <pu:PUTreeViewItem Header="  导出" PreviewMouseUp="MenuItem_Click"/>
+                <pu:PUTreeViewItem Header="  导出当前页" PreviewMouseUp="MenuItem_Click"/>
             </pu:PUTreeViewItem>
             <pu:PUTreeViewItem Header="统计" Width="162" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
                 <pu:PUTreeViewItem Header="  源地统计"></pu:PUTreeViewItem>
