@@ -69,15 +69,8 @@
                                                 <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/FOLDER_48px.png" Stretch="Uniform"/>
                                             </pu:PUButton.Background>
                                         </pu:PUButton>
-                                        <pu:PUTextBox x:Name="LayerIncreamentTextBox"  Margin="108,346,66,40" Background="#99FFFFFF" BorderCornerRadius="3" RenderTransformOrigin="0.5,0.5">
-                                            <pu:PUTextBox.RenderTransform>
-                                                <TransformGroup>
-                                                    <ScaleTransform/>
-                                                    <SkewTransform AngleY="-0.233"/>
-                                                    <RotateTransform/>
-                                                    <TranslateTransform Y="-0.996"/>
-                                                </TransformGroup>
-                                            </pu:PUTextBox.RenderTransform>
+                                        <pu:PUTextBox x:Name="LayerIncreamentTextBox"  Margin="108,346,66,40" Background="#99FFFFFF" BorderCornerRadius="3" >
+                                           
                                         </pu:PUTextBox>
                                         <Label Content="数据图层名:" Margin="3,347,557,39" Foreground="White"/>
                                         <Label x:Name="ShpProgressLabel" Content="" Margin="311,383,201,3" Foreground="White"/>
@@ -168,7 +161,7 @@
                                     <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/DELETE_16px.png" Stretch="None"/>
                                 </pu:PUButton.Background>
                             </pu:PUButton>
-                            <pu:PUButton x:Name="SeqStDelBtn" Content="" Margin="37,218,588,162" BorderCornerRadius="6" ToolTip="删除序列-状态关系" RenderTransformOrigin="0.5,0.5" Click="SeqStDelBtn_Click">
+                            <pu:PUButton x:Name="SeqStDelBtn" Content="" Margin="37,218,588,162" BorderCornerRadius="6" ToolTip="删除序列-状态关系"  Click="SeqStDelBtn_Click">
                                 <pu:PUButton.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>

@@ -972,9 +972,17 @@ namespace MapVisualizationApp.GUI
                 CQL += SpaceCondition + WhereTextBox.Text+" "/*多加一个空格防止手动输入时导致格式错误*/ + TimeCondition;
                 string CountCQL = CQL + " RETURN COUNT(NODE)";
                 CQL += " RETURN NODE";              
-                if (SortComboBox.SelectedIndex > 1)
+                if (SortComboBox.SelectedIndex > 0)
                 {
-                    CQL += " ORDER BY NODE." + SortComboBox.SelectedValue.ToString()+" "+OrderType;
+                    if(SortComboBox.SelectedValue.ToString().ToUpper().Contains("TIME")&& SortComboBox.SelectedValue.ToString().ToUpper() != "DURTIME")
+                    {
+                        CQL += " ORDER BY datetime(replace(NODE." + SortComboBox.SelectedValue.ToString() + ",\" \",\"T\")) " + OrderType;
+                    }
+                    else
+                    {
+                        CQL += " ORDER BY NODE." + SortComboBox.SelectedValue.ToString() + " " + OrderType;
+                    }
+                    
                 }
                 CQL += " SKIP 0 LIMIT "+Const.PERPAGECOUNT.ToString();
                 string[] CQLS = { CQL, CountCQL };

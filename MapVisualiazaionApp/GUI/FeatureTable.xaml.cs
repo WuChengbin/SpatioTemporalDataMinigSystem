@@ -30,20 +30,29 @@ namespace MapVisualizationApp.GUI
         private List<Dictionary<string, string>> StNode;
         private List<String> SqFields;
         private List<String> StFields;
-        
+
+        struct Parm {
+            public string CQL;
+            public System.Windows.Controls.DataGrid dataGrid;
+        }    
         //CQL语句
         private string EventQueryCQL = string.Empty;
-        private string SeqQueryCQL = string.Empty;
-        private string StateQueryCQL = string.Empty;
 
         //CQL模板
         private string EventOrderCQLTemplate = string.Empty;
         private string EventNonOrderCQLTemplate = string.Empty;
+        private string SeqCQLTemplate = string.Empty;
+        private string StCQLTemplate = string.Empty;
 
         //
         private int EventCount = 0;
-        private string OrderType = "ASC";
-        
+        private string EventOrderType = "ASC";
+        private int SeqCount = 0;
+        private string SeqOrderType = "ASC";
+        private int StCount = 0;
+        private string StOrderType = "ASC";
+
+
         public FeatureTable(QueryDlg QDlg, DataTable dt, string text,string EventQueryCQL,int EventCount=0)
         {
             InitializeComponent();              
@@ -52,20 +61,28 @@ namespace MapVisualizationApp.GUI
             this.EventQueryCQL = EventQueryCQL;
 
             //获取CQL模板
-            if (EventQueryCQL.Contains("ORDER BY"))
+            if (EventQueryCQL.Contains("ORDER BY"))//进行过排序
             {
+                if(EventQueryCQL.Contains("ORDER BY datetime"))//根据时间排过序
+                {
+                    //还原成一般格式
+                    EventQueryCQL = EventQueryCQL.Replace(EventQueryCQL.Substring(EventQueryCQL.LastIndexOf("datetime"), 
+                        EventQueryCQL.LastIndexOf(")")+1- EventQueryCQL.LastIndexOf("datetime")),
+                        "NODE."+ QDlg.SortComboBox.SelectedValue.ToString());
+                }
                 string str = EventQueryCQL.Substring(EventQueryCQL.LastIndexOf("ORDER BY NODE." + QDlg.SortComboBox.SelectedValue.ToString())+("ORDER BY NODE." + QDlg.SortComboBox.SelectedValue.ToString()).Length);
                 EventOrderCQLTemplate = EventQueryCQL.Replace("ORDER BY NODE." + QDlg.SortComboBox.SelectedValue.ToString(), "ORDER BY NODE.{0}");
                 EventOrderCQLTemplate = EventOrderCQLTemplate.Replace(str.Contains("ASC") == true ? "ASC" : "DESC", " {1}");
-                OrderType = str.Contains("ASC") == true ?  "ASC":"DESC";
-                if (OrderType == "ASC")
+                EventOrderCQLTemplate = EventOrderCQLTemplate.Replace("SKIP 0 LIMIT "+Const.PERPAGECOUNT,"SKIP {2} LIMIT {3}");
+                EventOrderType = str.Contains("ASC") == true ?  "ASC":"DESC";
+                if (EventOrderType == "ASC")
                 {
                     ImageBrush EnableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/ASC.PNG", UriKind.Relative)));
                     EnableBr.Stretch = Stretch.Uniform;
                     OrderBtn.Background = EnableBr;
                     OrderBtn.ToolTip = "升序排列";
                 }
-                else if (OrderType == "DESC")
+                else if (EventOrderType == "DESC")
                 {
                     ImageBrush DisableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/DESC.png", UriKind.Relative)));
                     DisableBr.Stretch = Stretch.Uniform;
@@ -80,15 +97,16 @@ namespace MapVisualizationApp.GUI
             
             this.EventCount = EventCount;
             EventPageNav.TotalPage = (int)Math.Ceiling((double)(EventCount * 1.0 / Const.PERPAGECOUNT));
+            EventPageNav.Visibility = EventPageNav.TotalPage == 1 ? Visibility.Hidden : Visibility.Visible;
             (this.tabControl.Items[1] as TabItem).Visibility = Visibility.Hidden;
             (this.tabControl.Items[2] as TabItem).Visibility = Visibility.Hidden;
             for(int i = 1; i < QDlg.SortComboBox.Items.Count; i++)//不要第一项
             {
                 PUComboBoxItem tempItem = new PUComboBoxItem();
                 tempItem.Content = (QDlg.SortComboBox.Items[i] as PUComboBoxItem).Content;
-                SortComboBox.Items.Add(tempItem);
+                EventSortComboBox.Items.Add(tempItem);
             }
-            SortComboBox.SelectedIndex = QDlg.SortComboBox.SelectedIndex;
+            EventSortComboBox.SelectedIndex = QDlg.SortComboBox.SelectedIndex;
             if (dt != null)
             {
                 dataGridEvent.ItemsSource = dt.DefaultView;
@@ -122,12 +140,16 @@ namespace MapVisualizationApp.GUI
                     PRID = (dataGridEvent.SelectedItem as DataRowView).Row[Index_PRID].ToString();                   
                     string SQCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->(SQNODE) RETURN SQNODE SKIP 0 LIMIT "+Const.PERPAGECOUNT.ToString();
                     string STCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->()-[:Belong]->(STNODE) RETURN STNODE SKIP 0 LIMIT " + Const.PERPAGECOUNT.ToString(); ;
-                    SeqQueryCQL = SQCQL;
-                    StateQueryCQL = STCQL;
+                    string SQCountCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->(SQNODE) RETURN COUNT(SQNODE)";
+                    string STCountCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->()-[:Belong]->(STNODE) RETURN COUNT(STNODE)";
+                    SeqCQLTemplate = SQCQL.Replace("SKIP 0", "SKIP {0}");
+                    StCQLTemplate = STCQL.Replace("SKIP 0", "SKIP {0}");
                     try
                     {
                         SqNode = Neo4j64.QueryNodeDataTable(SQCQL);
                         StNode = Neo4j64.QueryNodeDataTable(STCQL);
+                        SeqCount = Convert.ToInt32(Neo4j64.QueryNonNodeDataTable(SQCountCQL)[0][0]);
+                        StCount = Convert.ToInt32(Neo4j64.QueryNonNodeDataTable(STCountCQL)[0][0]);
                     }
                     catch (Exception ex)
                     {
@@ -182,6 +204,27 @@ namespace MapVisualizationApp.GUI
                 QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
                 (this.tabControl.Items[1] as TabItem).Visibility = Visibility.Visible;
                 (this.tabControl.Items[2] as TabItem).Visibility = Visibility.Visible;
+                SqFields.Sort();
+                StFields.Sort();
+                for (int i = 0; i < SqFields.Count; i++)
+                {
+                    PUComboBoxItem tempItem = new PUComboBoxItem();
+                    tempItem.Content = SqFields[i];
+                    SeqSortComboBox.Items.Add(tempItem);
+                }
+                for (int i = 0; i < StFields.Count; i++)
+                {
+                    PUComboBoxItem tempItem = new PUComboBoxItem();
+                    tempItem.Content = StFields[i];
+                    StSortComboBox.Items.Add(tempItem);
+                }
+                SeqSortComboBox.SelectedIndex = 0;
+                StSortComboBox.SelectedIndex = 0;
+                SequencePageNav.TotalPage= (int)Math.Ceiling(SeqCount * 1.0 / Const.PERPAGECOUNT);
+                SequencePageNav.Visibility = SequencePageNav.TotalPage == 1 ? Visibility.Hidden : Visibility.Visible;
+
+                StatePageNav.TotalPage = (int)Math.Ceiling(StCount * 1.0 / Const.PERPAGECOUNT);
+                StatePageNav.Visibility = StatePageNav.TotalPage == 1 ? Visibility.Hidden : Visibility.Visible;
             }));
             
                        
@@ -191,7 +234,7 @@ namespace MapVisualizationApp.GUI
             try
             {
                 SqFields = Neo4j64.QueryFeatureFields(Neo4j64.QueryEventSeqLabel(NodeType.ToString()));
-                StFields = Neo4j64.QueryFeatureFields(Neo4j64.QueryEventStateLabel(NodeType.ToString()));
+                StFields = Neo4j64.QueryFeatureFields(Neo4j64.QueryEventStateLabel(NodeType.ToString()));             
             }
             catch (Exception ex)
             {
@@ -767,7 +810,7 @@ namespace MapVisualizationApp.GUI
             {
                 try
                 {
-                    StatusTableInfo.Content = "所选事件序列统计：" + (dataGridSequence.ItemsSource as DataView).ToTable().Rows.Count;
+                    StatusTableInfo.Content = "所选事件序列统计：" + SeqCount;
                 }
                 catch
                 {
@@ -778,7 +821,7 @@ namespace MapVisualizationApp.GUI
             {
                 try
                 {
-                    StatusTableInfo.Content = "所选事件状态统计：" + (dataGridState.ItemsSource as DataView).ToTable().Rows.Count;
+                    StatusTableInfo.Content = "所选事件状态统计：" + StCount;
                 }
                 catch
                 {
@@ -893,104 +936,51 @@ namespace MapVisualizationApp.GUI
             }
         }
 
+
         private void EventPageNav_CurrentPageChanged(object sender, RoutedPropertyChangedEventArgs<int> e)
         {
-            //string tempCQL = EventQueryCQL.Substring(0, EventQueryCQL.LastIndexOf("SKIP"));
-            //string tempStr = EventQueryCQL.Substring(EventQueryCQL.LastIndexOf("LIMIT"));
-            //string tempSkip = (Convert.ToInt16(tempStr.Substring(6))*(EventPageNav.CurrentPage-1)).ToString();
-            //string CQL = tempCQL + "SKIP " + tempSkip + " "+tempStr;//重新组织下一页表的查询语句
-            string CQL = string.Empty;
-            if (SortComboBox.SelectedIndex > 0)
-            {
-                if (EventOrderCQLTemplate == string.Empty)
-                {
-                    EventOrderCQLTemplate = EventNonOrderCQLTemplate.Replace("SKIP {0} LIMIT {1}", "ORDER BY NODE.{0} {1} SKIP {2} LIMIT {3}");
-                }
-                CQL = string.Format(EventOrderCQLTemplate, 
-                    SortComboBox.SelectedValue.ToString(), 
-                    OrderType, (Const.PERPAGECOUNT*(EventPageNav.CurrentPage - 1)).ToString(), 
-                    Const.PERPAGECOUNT.ToString());           
-            }
-            else
-            {
-                CQL = string.Format(EventNonOrderCQLTemplate,
-                    (Const.PERPAGECOUNT * (EventPageNav.CurrentPage - 1)).ToString(),
-                    Const.PERPAGECOUNT.ToString());
-            }
-            Thread thread = new Thread(new ParameterizedThreadStart(UpdateEventTable));           
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start(CQL);
+            EventTableUpdate();
         }
 
         private void PUButton_Click(object sender, RoutedEventArgs e)
         {
-            if (OrderType == "ASC")
+            if (EventOrderType == "ASC")
             {
                 ImageBrush EnableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/DESC.PNG", UriKind.Relative)));
                 EnableBr.Stretch = Stretch.Uniform;
                 OrderBtn.Background = EnableBr;
-                OrderType = "DESC";
+                EventOrderType = "DESC";
                 OrderBtn.ToolTip = "降序排列";
             }
-            else if (OrderType == "DESC")
+            else if (EventOrderType == "DESC")
             {
                 ImageBrush DisableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/ASC.png", UriKind.Relative)));
                 DisableBr.Stretch = Stretch.Uniform;
                 OrderBtn.Background = DisableBr;
-                OrderType = "ASC";
+                EventOrderType = "ASC";
                 OrderBtn.ToolTip = "升序排列";
             }
-            string CQL = string.Empty;
-            if (SortComboBox.SelectedIndex > 0)
-            {
-                if (EventOrderCQLTemplate == string.Empty)
-                {
-                    EventOrderCQLTemplate = EventNonOrderCQLTemplate.Replace("SKIP {0} LIMIT {1}", "ORDER BY NODE.{0} {1} SKIP {2} LIMIT {3}");
-                }
-                CQL = string.Format(EventOrderCQLTemplate,
-                    SortComboBox.SelectedValue.ToString(),
-                    OrderType, (Const.PERPAGECOUNT * (EventPageNav.CurrentPage - 1)).ToString(),
-                    Const.PERPAGECOUNT.ToString());
-                Thread thread = new Thread(new ParameterizedThreadStart(UpdateEventTable));
-                thread.SetApartmentState(ApartmentState.STA);
-                thread.Start(CQL);
-            }
+            EventTableUpdate();
         }
 
         private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (dataGridEvent.ItemsSource != null)
-            {
-                string CQL = string.Empty;
-                if (SortComboBox.SelectedIndex > 0)
-                {
-                    if (EventOrderCQLTemplate == string.Empty)
-                    {
-                        EventOrderCQLTemplate = EventNonOrderCQLTemplate.Replace("SKIP {0} LIMIT {1}", "ORDER BY NODE.{0} {1} SKIP {2} LIMIT {3}");
-                    }
-                    CQL = string.Format(EventOrderCQLTemplate,
-                        SortComboBox.SelectedValue.ToString(),
-                        OrderType, (Const.PERPAGECOUNT * (EventPageNav.CurrentPage - 1)).ToString(),
-                        Const.PERPAGECOUNT.ToString());
-                    Thread thread = new Thread(new ParameterizedThreadStart(UpdateEventTable));
-                    thread.SetApartmentState(ApartmentState.STA);
-                    thread.Start(CQL);
-                }
-            }           
+            EventTableUpdate();
         }
-        private void UpdateEventTable(object CQL)
+
+        private void UpdateTableByCQL(object Parms)
         {
             Dispatcher.Invoke(new Action(delegate
             {
                 this.IsAwaitShow = true;
             }));
-                
+
             List<Dictionary<string, string>> Nodes = new List<Dictionary<string, string>>();
             //转换为DataTable
             DataTable tempTable = new DataTable("Dataset");
             try
             {
-                Nodes = Neo4j64.QueryNodeDataTable((string)CQL);
+                Nodes = Neo4j64.QueryNodeDataTable(((Parm)Parms).CQL);
             }
             catch
             {
@@ -1017,10 +1007,10 @@ namespace MapVisualizationApp.GUI
                     tempTable = Convertor.MapNode2DataTable(Nodes, QDlg.mainForm.FieldsMap, Keys);
                     if (tempTable != null)
                     {
-                        (dataGridEvent.ItemsSource as DataView).Table.Rows.Clear();
+                        (((Parm)Parms).dataGrid.ItemsSource as DataView).Table.Rows.Clear();
                         for (int i = 0; i < tempTable.Rows.Count; i++)
                         {
-                            (dataGridEvent.ItemsSource as DataView).Table.ImportRow(tempTable.Rows[i]);
+                            (((Parm)Parms).dataGrid.ItemsSource as DataView).Table.ImportRow(tempTable.Rows[i]);
                         }
                     }
                     QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
@@ -1036,6 +1026,97 @@ namespace MapVisualizationApp.GUI
                     this.IsAwaitShow = false;
                 }));
             }
+        }
+
+        private void SequencePageNav_CurrentPageChanged(object sender, RoutedPropertyChangedEventArgs<int> e)
+        {
+            SeqTableUpdate();
+        }
+
+        private void SeqSortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SeqTableUpdate();
+        }
+
+        private void EventTableUpdate()
+        {
+            if (dataGridEvent.ItemsSource != null)
+            {
+                string CQL = string.Empty;
+                if (EventSortComboBox.SelectedIndex > 0)
+                {
+                    if (EventOrderCQLTemplate == string.Empty)
+                    {
+                        EventOrderCQLTemplate = EventNonOrderCQLTemplate.Replace("SKIP {0} LIMIT {1}", "ORDER BY NODE.{0} {1} SKIP {2} LIMIT {3}");
+                    }
+                    if (EventSortComboBox.SelectedValue.ToString().ToUpper().Contains("TIME") && EventSortComboBox.SelectedValue.ToString().ToUpper() != "DURTIME")
+                    {
+                        CQL = string.Format(EventOrderCQLTemplate.Replace("NODE.{0}", "datetime(replace(NODE.{0},\" \",\"T\"))"),
+                        EventSortComboBox.SelectedValue.ToString(),
+                        EventOrderType, (Const.PERPAGECOUNT * (EventPageNav.CurrentPage - 1)).ToString(),
+                        Const.PERPAGECOUNT.ToString());
+                    }
+                    else
+                    {
+                        CQL = string.Format(EventOrderCQLTemplate,
+                        EventSortComboBox.SelectedValue.ToString(),
+                        EventOrderType, (Const.PERPAGECOUNT * (EventPageNav.CurrentPage - 1)).ToString(),
+                        Const.PERPAGECOUNT.ToString());
+                    }
+                }
+                else
+                {
+                    CQL = string.Format(EventNonOrderCQLTemplate,
+                    (Const.PERPAGECOUNT * (EventPageNav.CurrentPage - 1)).ToString(),
+                    Const.PERPAGECOUNT.ToString());
+                }
+                Parm p = new Parm();
+                p.CQL = CQL;
+                p.dataGrid = dataGridEvent;
+                Thread thread = new Thread(new ParameterizedThreadStart(UpdateTableByCQL));
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start(p);
+            }
+        }
+        private void SeqTableUpdate()
+        {
+            if (dataGridSequence.ItemsSource != null)
+            {
+                string CQL = SeqCQLTemplate;
+                if (SeqSortComboBox.SelectedIndex > 0)
+                {
+                    if (SeqSortComboBox.SelectedIndex > 0)
+                    {
+                        if (SeqSortComboBox.SelectedValue.ToString().ToUpper().Contains("TIME") && SeqSortComboBox.SelectedValue.ToString().ToUpper() != "DURTIME")
+                        {
+                            CQL = string.Format(SeqCQLTemplate.Replace("RETURN SQNODE", "RETURN SQNODE ORDER BY datetime(replace(SQNODE.{1},\" \",\"T\")) {2}"),
+                            Const.PERPAGECOUNT.ToString(),
+                            SeqSortComboBox.SelectedValue.ToString(),
+                            SeqOrderType,
+                            (Const.PERPAGECOUNT * (SequencePageNav.CurrentPage - 1)).ToString());
+                        }
+                        else
+                        {
+                            CQL = string.Format(SeqCQLTemplate.Replace("RETURN SQNODE", "RETURN SQNODE ORDER BY SQNODE.{2} {3}"),
+                            Const.PERPAGECOUNT.ToString(),
+                            SeqSortComboBox.SelectedValue.ToString(),
+                            SeqOrderType,
+                            (Const.PERPAGECOUNT * (SequencePageNav.CurrentPage - 1)).ToString());
+                        }
+                        Parm p = new Parm();
+                        p.CQL = CQL;
+                        p.dataGrid = dataGridSequence;
+                        Thread thread = new Thread(new ParameterizedThreadStart(UpdateTableByCQL));
+                        thread.SetApartmentState(ApartmentState.STA);
+                        thread.Start(p);
+
+                    }
+                }
+            }
+        }
+        private void StateTableUpdate()
+        {
+
         }
     }
 }
