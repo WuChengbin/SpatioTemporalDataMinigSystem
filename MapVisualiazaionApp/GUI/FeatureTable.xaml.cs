@@ -79,15 +79,15 @@ namespace MapVisualizationApp.GUI
                 {
                     ImageBrush EnableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/ASC.PNG", UriKind.Relative)));
                     EnableBr.Stretch = Stretch.Uniform;
-                    OrderBtn.Background = EnableBr;
-                    OrderBtn.ToolTip = "升序排列";
+                    EventOrderBtn.Background = EnableBr;
+                    EventOrderBtn.ToolTip = "升序排列";
                 }
                 else if (EventOrderType == "DESC")
                 {
                     ImageBrush DisableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/DESC.png", UriKind.Relative)));
                     DisableBr.Stretch = Stretch.Uniform;
-                    OrderBtn.Background = DisableBr;
-                    OrderBtn.ToolTip = "降序排列";
+                    EventOrderBtn.Background = DisableBr;
+                    EventOrderBtn.ToolTip = "降序排列";
                 }
             }
             else//未进行排序的情况
@@ -138,12 +138,12 @@ namespace MapVisualizationApp.GUI
                 if (Index_PRID >= 0)
                 {
                     PRID = (dataGridEvent.SelectedItem as DataRowView).Row[Index_PRID].ToString();                   
-                    string SQCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->(SQNODE) RETURN SQNODE SKIP 0 LIMIT "+Const.PERPAGECOUNT.ToString();
-                    string STCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->()-[:Belong]->(STNODE) RETURN STNODE SKIP 0 LIMIT " + Const.PERPAGECOUNT.ToString(); ;
-                    string SQCountCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->(SQNODE) RETURN COUNT(SQNODE)";
-                    string STCountCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->()-[:Belong]->(STNODE) RETURN COUNT(STNODE)";
-                    SeqCQLTemplate = SQCQL.Replace("SKIP 0", "SKIP {0}");
-                    StCQLTemplate = STCQL.Replace("SKIP 0", "SKIP {0}");
+                    string SQCQL = "MATCH(NODE:" + this.Title+ ")-[:Belong]->(SQNODE) WHERE NODE.PRID=" + PRID+" RETURN SQNODE SKIP 0 LIMIT "+Const.PERPAGECOUNT.ToString();
+                    string STCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->()-[:Belong]->(STNODE) WHERE NODE.PRID=" + PRID + " RETURN STNODE SKIP 0 LIMIT " + Const.PERPAGECOUNT.ToString(); ;
+                    string SQCountCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->(SQNODE) WHERE NODE.PRID=" + PRID + " RETURN COUNT(SQNODE)";
+                    string STCountCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->()-[:Belong]->(STNODE) WHERE NODE.PRID=" + PRID + " RETURN COUNT(STNODE)";
+                    SeqCQLTemplate = SQCQL.Replace("SKIP 0 LIMIT "+Const.PERPAGECOUNT, "SKIP {0} LIMIT {1}");
+                    StCQLTemplate = STCQL.Replace("SKIP 0 LIMIT " + Const.PERPAGECOUNT, "SKIP {0} LIMIT {1}");
                     try
                     {
                         SqNode = Neo4j64.QueryNodeDataTable(SQCQL);
@@ -221,10 +221,10 @@ namespace MapVisualizationApp.GUI
                 SeqSortComboBox.SelectedIndex = 0;
                 StSortComboBox.SelectedIndex = 0;
                 SequencePageNav.TotalPage= (int)Math.Ceiling(SeqCount * 1.0 / Const.PERPAGECOUNT);
-                SequencePageNav.Visibility = SequencePageNav.TotalPage == 1 ? Visibility.Hidden : Visibility.Visible;
+                SequencePageNav.Visibility = SequencePageNav.TotalPage <=1 ? Visibility.Hidden : Visibility.Visible;
 
                 StatePageNav.TotalPage = (int)Math.Ceiling(StCount * 1.0 / Const.PERPAGECOUNT);
-                StatePageNav.Visibility = StatePageNav.TotalPage == 1 ? Visibility.Hidden : Visibility.Visible;
+                StatePageNav.Visibility = StatePageNav.TotalPage <= 1 ? Visibility.Hidden : Visibility.Visible;
             }));
             
                        
@@ -948,17 +948,17 @@ namespace MapVisualizationApp.GUI
             {
                 ImageBrush EnableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/DESC.PNG", UriKind.Relative)));
                 EnableBr.Stretch = Stretch.Uniform;
-                OrderBtn.Background = EnableBr;
+                EventOrderBtn.Background = EnableBr;
                 EventOrderType = "DESC";
-                OrderBtn.ToolTip = "降序排列";
+                EventOrderBtn.ToolTip = "降序排列";
             }
             else if (EventOrderType == "DESC")
             {
                 ImageBrush DisableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/ASC.png", UriKind.Relative)));
                 DisableBr.Stretch = Stretch.Uniform;
-                OrderBtn.Background = DisableBr;
+                EventOrderBtn.Background = DisableBr;
                 EventOrderType = "ASC";
-                OrderBtn.ToolTip = "升序排列";
+                EventOrderBtn.ToolTip = "升序排列";
             }
             EventTableUpdate();
         }
@@ -1085,38 +1085,83 @@ namespace MapVisualizationApp.GUI
                 string CQL = SeqCQLTemplate;
                 if (SeqSortComboBox.SelectedIndex > 0)
                 {
-                    if (SeqSortComboBox.SelectedIndex > 0)
+                    if (SeqSortComboBox.SelectedValue.ToString().ToUpper().Contains("TIME") && SeqSortComboBox.SelectedValue.ToString().ToUpper() != "DURTIME")
                     {
-                        if (SeqSortComboBox.SelectedValue.ToString().ToUpper().Contains("TIME") && SeqSortComboBox.SelectedValue.ToString().ToUpper() != "DURTIME")
-                        {
-                            CQL = string.Format(SeqCQLTemplate.Replace("RETURN SQNODE", "RETURN SQNODE ORDER BY datetime(replace(SQNODE.{1},\" \",\"T\")) {2}"),
-                            Const.PERPAGECOUNT.ToString(),
-                            SeqSortComboBox.SelectedValue.ToString(),
-                            SeqOrderType,
-                            (Const.PERPAGECOUNT * (SequencePageNav.CurrentPage - 1)).ToString());
-                        }
-                        else
-                        {
-                            CQL = string.Format(SeqCQLTemplate.Replace("RETURN SQNODE", "RETURN SQNODE ORDER BY SQNODE.{2} {3}"),
-                            Const.PERPAGECOUNT.ToString(),
-                            SeqSortComboBox.SelectedValue.ToString(),
-                            SeqOrderType,
-                            (Const.PERPAGECOUNT * (SequencePageNav.CurrentPage - 1)).ToString());
-                        }
-                        Parm p = new Parm();
-                        p.CQL = CQL;
-                        p.dataGrid = dataGridSequence;
-                        Thread thread = new Thread(new ParameterizedThreadStart(UpdateTableByCQL));
-                        thread.SetApartmentState(ApartmentState.STA);
-                        thread.Start(p);
-
+                        CQL = string.Format(SeqCQLTemplate.Replace("RETURN SQNODE", "RETURN SQNODE ORDER BY datetime(replace(SQNODE.{2},\" \",\"T\")) {3}"),
+                        (Const.PERPAGECOUNT * (SequencePageNav.CurrentPage - 1)).ToString(),
+                         Const.PERPAGECOUNT.ToString(),
+                        SeqSortComboBox.SelectedValue.ToString(),
+                        SeqOrderType);
                     }
+                    else
+                    {
+                        CQL = string.Format(SeqCQLTemplate.Replace("RETURN SQNODE", "RETURN SQNODE ORDER BY SQNODE.{2} {3}"),
+                        (Const.PERPAGECOUNT * (SequencePageNav.CurrentPage - 1)).ToString(),
+                         Const.PERPAGECOUNT.ToString(),
+                        SeqSortComboBox.SelectedValue.ToString(),
+                        SeqOrderType);
+                    }
+                    Parm p = new Parm();
+                    p.CQL = CQL;
+                    p.dataGrid = dataGridSequence;
+                    Thread thread = new Thread(new ParameterizedThreadStart(UpdateTableByCQL));
+                    thread.SetApartmentState(ApartmentState.STA);
+                    thread.Start(p);
                 }
             }
         }
         private void StateTableUpdate()
         {
+            if (dataGridState.ItemsSource != null)
+            {
+                string CQL = StCQLTemplate;
+                if (StSortComboBox.SelectedIndex > 0)
+                {
+                    if (StSortComboBox.SelectedValue.ToString().ToUpper().Contains("TIME") && StSortComboBox.SelectedValue.ToString().ToUpper() != "DURTIME")
+                    {
+                        CQL = string.Format(StCQLTemplate.Replace("RETURN STNODE", "RETURN STNODE ORDER BY datetime(replace(STNODE.{2},\" \",\"T\")) {3}"),
+                        (Const.PERPAGECOUNT * (StatePageNav.CurrentPage - 1)).ToString(),
+                         Const.PERPAGECOUNT.ToString(),
+                        StSortComboBox.SelectedValue.ToString(),
+                        StOrderType);
+                    }
+                    else
+                    {
+                        CQL = string.Format(StCQLTemplate.Replace("RETURN STNODE", "RETURN STNODE ORDER BY STNODE.{2} {3}"),
+                        (Const.PERPAGECOUNT * (SequencePageNav.CurrentPage - 1)).ToString(),
+                         Const.PERPAGECOUNT.ToString(),
+                        StSortComboBox.SelectedValue.ToString(),
+                        StOrderType);
+                    }
+                    Parm p = new Parm();
+                    p.CQL = CQL;
+                    p.dataGrid = dataGridState;
+                    Thread thread = new Thread(new ParameterizedThreadStart(UpdateTableByCQL));
+                    thread.SetApartmentState(ApartmentState.STA);
+                    thread.Start(p);
+                }
+            }
+        }
 
+        private void OrderBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (SeqOrderType == "ASC")
+            {
+                ImageBrush EnableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/DESC.PNG", UriKind.Relative)));
+                EnableBr.Stretch = Stretch.Uniform;
+                SeqOrderBtn.Background = EnableBr;
+                SeqOrderType = "DESC";
+                SeqOrderBtn.ToolTip = "降序排列";
+            }
+            else if (SeqOrderType == "DESC")
+            {
+                ImageBrush DisableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/ASC.png", UriKind.Relative)));
+                DisableBr.Stretch = Stretch.Uniform;
+                SeqOrderBtn.Background = DisableBr;
+                SeqOrderType = "ASC";
+                SeqOrderBtn.ToolTip = "升序排列";
+            }
+            SeqTableUpdate();
         }
     }
 }

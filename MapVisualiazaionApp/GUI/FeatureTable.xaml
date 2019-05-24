@@ -75,8 +75,8 @@
                             </Style>
                         </DataGrid.RowStyle>
                     </DataGrid>
-                    <pu:PUPagingNav x:Name="EventPageNav" TotalPage="100" Height="24" VerticalAlignment="Bottom" Margin="5,0,0,3" HorizontalAlignment="Left" CurrentPageChanged="EventPageNav_CurrentPageChanged" Width="429"/>
-                    <pu:PUButton x:Name="OrderBtn" Margin="0,0,9,1" Click="PUButton_Click" Content="" BorderCornerRadius="3" ToolTip="升序排列"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="37" Height="27">
+                    <pu:PUPagingNav x:Name="EventPageNav" Height="24" VerticalAlignment="Bottom" Margin="5,0,0,3" HorizontalAlignment="Left" CurrentPageChanged="EventPageNav_CurrentPageChanged" Width="429"/>
+                    <pu:PUButton x:Name="EventOrderBtn" Margin="0,0,9,1" Content="" BorderCornerRadius="3" ToolTip="升序排列"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="37" Height="27" Click="PUButton_Click">
                         <pu:PUButton.Background>
                             <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/ASC.png" Stretch="Uniform"/>
                         </pu:PUButton.Background>
@@ -122,8 +122,8 @@
                             </Style>
                         </DataGrid.RowStyle>
                     </DataGrid>
-                    <pu:PUPagingNav x:Name="SequencePageNav" TotalPage="100" Height="24" VerticalAlignment="Bottom" Margin="5,0,0,3" HorizontalAlignment="Left" Width="429" CurrentPageChanged="SequencePageNav_CurrentPageChanged"/>
-                    <pu:PUButton x:Name="SeqOrderBtn" Margin="0,0,9,1" Click="PUButton_Click" Content="" BorderCornerRadius="3" ToolTip="升序排列"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="37" Height="28">
+                    <pu:PUPagingNav x:Name="SequencePageNav" Height="24" VerticalAlignment="Bottom" Margin="5,0,0,3" HorizontalAlignment="Left" Width="429" CurrentPageChanged="SequencePageNav_CurrentPageChanged"/>
+                    <pu:PUButton x:Name="SeqOrderBtn" Margin="0,0,9,1" Click="OrderBtn_Click" Content="" BorderCornerRadius="3" ToolTip="升序排列"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="37" Height="28">
                         <pu:PUButton.Background>
                             <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/ASC.png" Stretch="Uniform"/>
                         </pu:PUButton.Background>
@@ -178,7 +178,7 @@
                             </Style>
                         </DataGrid.RowStyle>
                     </DataGrid>
-                    <pu:PUPagingNav x:Name="StatePageNav" TotalPage="100" Height="24" VerticalAlignment="Bottom" Margin="5,0,0,2" HorizontalAlignment="Left" Width="429"/>
+                    <pu:PUPagingNav x:Name="StatePageNav" Height="24" VerticalAlignment="Bottom" Margin="5,0,0,2" HorizontalAlignment="Left" Width="429"/>
                     <pu:PUButton x:Name="StOrderBtn" Margin="0,0,9,1" Click="PUButton_Click" Content="" BorderCornerRadius="3" ToolTip="升序排列"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="37" Height="28">
                         <pu:PUButton.Background>
                             <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/ASC.png" Stretch="Uniform"/>
