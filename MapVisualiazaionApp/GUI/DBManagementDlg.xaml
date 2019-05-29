@@ -280,7 +280,7 @@
         </pu:PUTabItem>
         <pu:PUTabItem Header="用户更新">
             <Grid>
-                <DataGrid x:Name="UserInfoTable"  HorizontalGridLinesBrush="#FFB2A5A5" VerticalGridLinesBrush="#FFB2A5A5" AutoGenerateColumns="True" Background="#00F0F0F0" ColumnWidth="*" Foreground="#D8FFFFFF" FontWeight="Normal" FontSize="14" Margin="0,0,0,164" BorderBrush="White">
+                <DataGrid x:Name="UserInfoTable"  HorizontalGridLinesBrush="#FFB2A5A5" VerticalGridLinesBrush="#FFB2A5A5" AutoGenerateColumns="True" Background="#00F0F0F0" ColumnWidth="*" Foreground="#D8FFFFFF" FontWeight="Normal" FontSize="14" Margin="0,0,0,164" BorderBrush="White" SelectionChanged="UserInfoTable_SelectionChanged">
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <!--设置边框笔刷（BorderBrush）-->

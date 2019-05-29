@@ -2002,6 +2002,7 @@ namespace MapVisualizationApp.GUI
                 CreateBtn.Content = "创建用户";
                 CreateBtn.IsEnabled = true;
                 UserStateLabel.Content = "用户状态：待创建";
+                UserInfoTable.SelectedItems.Clear();
                 SuspendBtn.Visibility = Visibility.Hidden;
             }
             else
@@ -2127,7 +2128,6 @@ namespace MapVisualizationApp.GUI
             if (UserComboBox.SelectedIndex == 0) return;
             if (!Neo4j64.isAdminRole)
             {
-
                 PUMessageBox.ShowDialog("当前用户无权限！");
                 return;
             }
@@ -2148,7 +2148,7 @@ namespace MapVisualizationApp.GUI
                             }
                             catch (Exception ex)
                             {
-                                //PUMessageBox.ShowDialog(ex.Message);
+                                PUMessageBox.ShowDialog(ex.Message);
                             }
                         }
                     }
@@ -2369,7 +2369,9 @@ namespace MapVisualizationApp.GUI
 
                                 string CQL = "MATCH(N:ReferenceNode)-[:LAYER]->(M)-[:RTREE_METADATA]->(P) WHERE M.layer='{0}' return P.totalGeometryCount";
                                 List<List<string>> RES = Neo4j64.QueryNonNodeDataTable(string.Format(CQL, Layers[i]));
-                                newRow["多边形数量"] = RES[0][0];
+                                newRow["多边形数量"] = RES[0].Count > 0 ? RES[0][0] : "0";
+
+
                                 DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0);
                                 newRow["创建时间"] = dt.AddMilliseconds(Convert.ToDouble(tempNode[0]["ctime"])).ToLocalTime().ToString("yyyy'/'MM'/'dd HH:mm:ss");
                             }
@@ -2434,32 +2436,64 @@ namespace MapVisualizationApp.GUI
                             PUMessageBox.ShowDialog(ex.Message);
                             return;
                         }));
-                    }
-                    Counter Counter = new Counter();
-                    Parallel.For(0, ShpFiles.Count, (i) =>
+                    }                 
+                    if (ShpFiles.Count > 20) //数量多的时候使用并行方式
                     {
-                        try
+                        Counter Counter = new Counter();
+                        Parallel.For(0, ShpFiles.Count, (i) =>
                         {
-                            Neo4j64.ExcuteCQL(string.Format("call spatial.importShapefileToLayer('{0}','{1}')", LayerName, ShpFiles[i]));
-                            Counter.Increment();
-                            Dispatcher.Invoke(new Action(delegate
+                            try
                             {
-                                IncreamentProgressBar.Percent = Math.Round((Counter.Count) * 1.0 / ShpFiles.Count, 3);
-                                ShpProgressLabel.Content = "已导入:" + Counter.Count + "/" + ShpFiles.Count;
-                            }));
+                                Neo4j64.ExcuteCQL(string.Format("call spatial.importShapefileToLayer('{0}','{1}')", LayerName, ShpFiles[i]));
+                                Counter.Increment();
+                                Dispatcher.Invoke(new Action(delegate
+                                {
+                                    IncreamentProgressBar.Percent = Math.Round((Counter.Count) * 1.0 / ShpFiles.Count, 3);
+                                    ShpProgressLabel.Content = "已导入:" + Counter.Count + "/" + ShpFiles.Count;
+                                }));
 
-                        }
-                        catch (Exception ex)
+                            }
+                            catch (Exception ex)
+                            {
+                                Dispatcher.Invoke(new Action(delegate
+                                {
+                                    IncreamentProgressBar.Visibility = Visibility.Hidden;
+                                    PUMessageBox.ShowDialog(ex.Message);
+                                    return;
+                                }));
+
+                            }
+                        });                       
+                    }
+                    else
+                    {
+                        Counter Counter = new Counter();
+                        for (int i = 0; i < ShpFiles.Count; i++)
                         {
-                            Dispatcher.Invoke(new Action(delegate
+                            try
                             {
-                                IncreamentProgressBar.Visibility = Visibility.Hidden;
-                                PUMessageBox.ShowDialog(ex.Message);
-                                return;
-                            }));
+                                Neo4j64.ExcuteCQL(string.Format("call spatial.importShapefileToLayer('{0}','{1}')", LayerName, ShpFiles[i]));
+                                Counter.Increment();
+                                Dispatcher.Invoke(new Action(delegate
+                                {
+                                    IncreamentProgressBar.Percent = Math.Round((Counter.Count) * 1.0 / ShpFiles.Count, 3);
+                                    ShpProgressLabel.Content = "已导入:" + Counter.Count + "/" + ShpFiles.Count;
+                                }));
 
+                            }
+                            catch (Exception ex)
+                            {
+                                Dispatcher.Invoke(new Action(delegate
+                                {
+                                    IncreamentProgressBar.Visibility = Visibility.Hidden;
+                                    PUMessageBox.ShowDialog(ex.Message);
+                                    return;
+                                }));
+
+                            }
                         }
-                    });
+                    }
+
                     Dispatcher.Invoke(new Action(delegate
                     {
                         ShpProgressLabel.Content = "";
@@ -2472,6 +2506,15 @@ namespace MapVisualizationApp.GUI
                 t.SetApartmentState(ApartmentState.STA);
                 t.Start();
             }           
+        }
+
+        private void UserInfoTable_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (UserInfoTable.SelectedItems.Count>0)
+            {
+                string User = (string)(UserInfoTable.SelectedItem as DataRowView)["用户名"];
+                UserComboBox.SelectedValue = User;
+            }
         }
     }
 }

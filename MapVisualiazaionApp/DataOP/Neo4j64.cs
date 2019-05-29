@@ -131,25 +131,27 @@ namespace MarineSTMiningSystem.DataOP
                             List<string> temp = new List<string>();
                             for(int j=0;j < results[i].Values.ToArray().Length; j++)
                             {
-                                Type t = results[i].Values.ToArray()[j].Value.GetType();
-                                if (results[i].Values.ToArray()[j].Value.GetType().Name.ToUpper().Contains("STRING"))
+                                if (results[i].Values.ToArray()[j].Value != null)
                                 {
-                                    temp.Add(results[i].Values.ToArray()[j].Value.ToString());
-                                }
-                                else if (results[i].Values.ToArray()[j].Value.GetType().Name.ToUpper().Contains("LIST"))
-                                {
-                                    string tempList = string.Empty;
-                                    for(int kk=0;kk< ((List<object>)results[i].Values.ToArray()[j].Value).Count; kk++)
+                                    Type t = results[i].Values.ToArray()[j].Value.GetType();
+                                    if (results[i].Values.ToArray()[j].Value.GetType().Name.ToUpper().Contains("STRING"))
                                     {
-                                        tempList += ((List<object>)results[i].Values.ToArray()[j].Value)[kk]+" ";
+                                        temp.Add(results[i].Values.ToArray()[j].Value.ToString());
                                     }
-                                    temp.Add(tempList);
-                                }
-                                else
-                                {
-                                    temp.Add(results[i].Values.ToArray()[j].Value.ToString());
-                                }
-                                
+                                    else if (results[i].Values.ToArray()[j].Value.GetType().Name.ToUpper().Contains("LIST"))
+                                    {
+                                        string tempList = string.Empty;
+                                        for (int kk = 0; kk < ((List<object>)results[i].Values.ToArray()[j].Value).Count; kk++)
+                                        {
+                                            tempList += ((List<object>)results[i].Values.ToArray()[j].Value)[kk] + " ";
+                                        }
+                                        temp.Add(tempList);
+                                    }
+                                    else
+                                    {
+                                        temp.Add(results[i].Values.ToArray()[j].Value.ToString());
+                                    }
+                                }                                                             
                             }
                             ResList.Add(temp);
                         }
@@ -462,19 +464,32 @@ namespace MarineSTMiningSystem.DataOP
 
         }
 
-        public static void ExcuteCQL(string CQL)
+        public static List<Dictionary<string,string>> ExcuteCQL(string CQL)
         {
+            List<Dictionary<string, string>> tempList = new List<Dictionary<string, string>>();
             if (isConnected)
             {
+
                 using (var session = neoDirver.Session(AccessMode.Read))
                 {
-                    session.WriteTransaction(rx => rx.Run(CQL)).ToList();
+                    var Result=session.WriteTransaction(rx => rx.Run(CQL)).ToList();
+                    for(int i = 0; i < Result.Count; i++)
+                    {
+                        Dictionary<string, string> tempDic = new Dictionary<string, string>();
+                        for(int j = 0; j < Result[i].Keys.Count; j++)
+                        {
+                            tempDic.Add(Result[i].Keys[j], Result[i].Values[Result[i].Keys[j].ToString()].ToString());
+                        }
+                        tempList.Add(tempDic);
+                    }
+                    
                 }
             }
             else
             {
                 throw new Exception("未连接数据库!");
             }
+            return tempList;
         }
 
         public static bool HasRelation(string Node1,string Node2)

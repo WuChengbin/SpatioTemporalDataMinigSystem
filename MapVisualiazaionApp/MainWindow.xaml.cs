@@ -118,7 +118,6 @@ namespace MapVisualizationApp
             
             //this.Topmost = true;
             button3.IsEnabled = false;
-            button4.IsEnabled = false;
         }
 
 
@@ -180,6 +179,7 @@ namespace MapVisualizationApp
                 labelStart.Visibility = Visibility.Visible;
                 labelEnd.Visibility = Visibility.Visible;
                 labelStart.Content = ListOfTime.ElementAt(0);
+                labelSep.Visibility = Visibility.Visible;
                 labelEnd.Content = ListOfTime.ElementAt(ListOfTime.Count - 1);
             }
             else
@@ -191,6 +191,7 @@ namespace MapVisualizationApp
                 buttonPause.Visibility = Visibility.Hidden;
                 slider.Visibility = Visibility.Hidden;
                 labelStart.Visibility = Visibility.Hidden;
+                labelSep.Visibility = Visibility.Hidden;
                 labelEnd.Visibility = Visibility.Hidden;
             }
         }
@@ -507,21 +508,6 @@ namespace MapVisualizationApp
             }
         }
 
-        private void Button4_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (button4.IsEnabled == true)
-            {
-                ImageBrush EnableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/EXIT_ENABLE_12px.png", UriKind.Relative)));
-                EnableBr.Stretch = Stretch.Uniform;
-                button4.Background = EnableBr;
-            }
-            else
-            {
-                ImageBrush DisableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/EXIT_DISABLE_12px.png", UriKind.Relative)));
-                DisableBr.Stretch = Stretch.Uniform;
-                button4.Background = DisableBr;
-            }
-        }
 
         private void ButtonLeft_Click(object sender, RoutedEventArgs e)
         {
@@ -581,13 +567,20 @@ namespace MapVisualizationApp
         {
             //stop
             //AnimateTimer.Enabled = false;
-            AnimateTimer.Stop();
-            slider.Value = slider.Minimuim;
-            buttonPlay.Visibility = Visibility.Visible;
-            buttonPause.Visibility = Visibility.Hidden;
-            labelStart.Content = ListOfTime.ElementAt(0);
+            //AnimateTimer.Stop();
+            //slider.Value = slider.Minimuim;
+            //buttonPlay.Visibility = Visibility.Visible;
+            //buttonPause.Visibility = Visibility.Hidden;
+            //labelStart.Content = ListOfTime.ElementAt(0);
             //buttonLeft.IsEnabled = true;
             //buttonRight.IsEnabled = true;
+            AnimateTimer.Stop();
+            SetPlayBarVisible(false);
+            AnimateTimer.Enabled = false;
+            button3.IsEnabled = false;
+            browser.Address = "about:blank";
+            puBubble.Visibility = Visibility.Hidden;
+            this.AnimateGraphicsOverlay.Graphics.Clear();
             AnimateGraphicsOverlay.Graphics.Clear();
         }
 
@@ -764,7 +757,6 @@ namespace MapVisualizationApp
         {
             SetPlayBarVisible(false);
             AnimateTimer.Enabled = false;
-            button4.IsEnabled = false;
             button3.IsEnabled = false;
             browser.Address = "about:blank";
             puBubble.Visibility = Visibility.Hidden;

@@ -28,12 +28,18 @@ namespace MapVisualizationApp.GUI
         private QueryDlg QDlg;
         private List<Dictionary<string, string>> SqNode;
         private List<Dictionary<string, string>> StNode;
-        private List<String> SqFields;
-        private List<String> StFields;
+        private List<string> SqFields;
+        private List<string> StFields;
+
+        //编号-多边形 wkt 单独存储
+        private Dictionary<string, string> EventGeometries;
+        private Dictionary<string, string> SeqGeometries;
+        private Dictionary<string, string> StateGeometries;
 
         struct Parm {
             public string CQL;
             public System.Windows.Controls.DataGrid dataGrid;
+            public int TabIndex;
         }    
         //CQL语句
         private string EventQueryCQL = string.Empty;
@@ -53,12 +59,17 @@ namespace MapVisualizationApp.GUI
         private string StOrderType = "ASC";
 
 
-        public FeatureTable(QueryDlg QDlg, DataTable dt, string text,string EventQueryCQL,int EventCount=0)
+        public FeatureTable(QueryDlg QDlg, DataTable dt, string text,string EventQueryCQL,int EventCount=0,Dictionary<string,string>EventGeometries=null)
         {
             InitializeComponent();              
             this.QDlg = QDlg;
             this.Title = text;
             this.EventQueryCQL = EventQueryCQL;
+            this.EventCount = EventCount;
+            if (EventGeometries != null)
+            {
+                this.EventGeometries = EventGeometries;
+            }
 
             //获取CQL模板
             if (EventQueryCQL.Contains("ORDER BY"))//进行过排序
@@ -94,8 +105,7 @@ namespace MapVisualizationApp.GUI
             {
                 EventNonOrderCQLTemplate = EventQueryCQL.Substring(0, EventQueryCQL.LastIndexOf("SKIP")) + "SKIP {0} LIMIT {1}";
             }
-            
-            this.EventCount = EventCount;
+                     
             EventPageNav.TotalPage = (int)Math.Ceiling((double)(EventCount * 1.0 / Const.PERPAGECOUNT));
             EventPageNav.Visibility = EventPageNav.TotalPage == 1 ? Visibility.Hidden : Visibility.Visible;
             (this.tabControl.Items[1] as TabItem).Visibility = Visibility.Hidden;
@@ -139,26 +149,57 @@ namespace MapVisualizationApp.GUI
                 {
                     PRID = (dataGridEvent.SelectedItem as DataRowView).Row[Index_PRID].ToString();                   
                     string SQCQL = "MATCH(NODE:" + this.Title+ ")-[:Belong]->(SQNODE) WHERE NODE.PRID=" + PRID+" RETURN SQNODE SKIP 0 LIMIT "+Const.PERPAGECOUNT.ToString();
-                    string STCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->()-[:Belong]->(STNODE) WHERE NODE.PRID=" + PRID + " RETURN STNODE SKIP 0 LIMIT " + Const.PERPAGECOUNT.ToString(); ;
-                    string SQCountCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->(SQNODE) WHERE NODE.PRID=" + PRID + " RETURN COUNT(SQNODE)";
-                    string STCountCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->()-[:Belong]->(STNODE) WHERE NODE.PRID=" + PRID + " RETURN COUNT(STNODE)";
+                    string STCQL = "MATCH(NODE:" + this.Title + ")-[:Belong]->()-[:Belong]->(STNODE) WHERE NODE.PRID=" + PRID + " RETURN STNODE SKIP 0 LIMIT " + Const.PERPAGECOUNT.ToString(); ;
+                    string SQCountCQL = "MATCH(NODE:" + this.Title + ")-[:Belong]->(SQNODE) WHERE NODE.PRID=" + PRID + " RETURN COUNT(SQNODE)";
+                    string STCountCQL = "MATCH(NODE:" + this.Title + ")-[:Belong]->()-[:Belong]->(STNODE) WHERE NODE.PRID=" + PRID + " RETURN COUNT(STNODE)";
                     SeqCQLTemplate = SQCQL.Replace("SKIP 0 LIMIT "+Const.PERPAGECOUNT, "SKIP {0} LIMIT {1}");
                     StCQLTemplate = STCQL.Replace("SKIP 0 LIMIT " + Const.PERPAGECOUNT, "SKIP {0} LIMIT {1}");
                     try
                     {
                         SqNode = Neo4j64.QueryNodeDataTable(SQCQL);
-                        StNode = Neo4j64.QueryNodeDataTable(STCQL);
                         SeqCount = Convert.ToInt32(Neo4j64.QueryNonNodeDataTable(SQCountCQL)[0][0]);
-                        StCount = Convert.ToInt32(Neo4j64.QueryNonNodeDataTable(STCountCQL)[0][0]);
+                        try
+                        {
+                            SeqGeometries = new Dictionary<string, string>();
+                            for(int i = 0; i < SqNode.Count; i++)
+                            {
+                                SeqGeometries.Add(SqNode[i]["SQID"].ToString(), SqNode[i]["geometry"].ToString());
+                            }
+                        }
+                        catch
+                        {
+                            SeqGeometries = null;                     
+                        }
                     }
                     catch (Exception ex)
                     {
                         QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
-                        PUMessageBox.ShowDialog("查询错误: " + ex.Message, "错误", Buttons.Yes);
-                        
-                        //System.Windows.MessageBox.Show("查询错误: " + ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Information);
-                        return;
+                        PUMessageBox.ShowDialog( ex.Message, "错误信息", Buttons.Yes);
                     }
+                    try
+                    {
+                        StNode = Neo4j64.QueryNodeDataTable(STCQL);
+                        StCount = Convert.ToInt32(Neo4j64.QueryNonNodeDataTable(STCountCQL)[0][0]);
+                        try
+                        {
+                            StateGeometries = new Dictionary<string, string>();
+                            for (int i = 0; i < StNode.Count; i++)
+                            {
+                                StateGeometries.Add(StNode[i]["STID"].ToString(), StNode[i]["geometry"].ToString());
+                            }
+                        }
+                        catch
+                        {
+                            StateGeometries = null;
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
+                        PUMessageBox.ShowDialog(ex.Message, "错误信息", Buttons.Yes);
+                    }
+
+                    
                 }
                 else
                 {
@@ -315,13 +356,13 @@ namespace MapVisualizationApp.GUI
             //|  t1  |  t2  |  t3  |  t4  |  t5  |  t6  |  t7  |  t8  |
             //---------------------------------------------------------
             //
-            HashSet<String> ListOfTime = new HashSet<String>();
-            List<String[]> ListOfProcess = new List<String[]>();
+            HashSet<string> ListOfTime = new HashSet<string>();
+            List<string[]> ListOfProcess = new List<string[]>();
             if (ListOfProcess.Count > 0) ListOfProcess.Clear();
             if (ListOfTime.Count > 0) ListOfTime.Clear();
 
 
-            List<String> tempList = new List<String>();
+            List<string> tempList = new List<string>();
             tempList.Add(StNode[0]["geometry"]/* + "-" + StNode[0]["Time"]*/);
             for (int i = 1; i < StNode.Count; i++)
             {
@@ -336,7 +377,7 @@ namespace MapVisualizationApp.GUI
                     ListOfTime.Add(StNode[i - 1]["Time"]);
                     ListOfTime.Add(StNode[i]["Time"]);
 
-                    String[] tempString = new String[tempList.Count];
+                    string[] tempString = new string[tempList.Count];
                     for (int m = 0; m < tempList.Count; m++)
                     {
                         tempString[m] = tempList[m];
@@ -347,7 +388,7 @@ namespace MapVisualizationApp.GUI
                 }
                 if (i == StNode.Count - 1)
                 {
-                    String[] tempString = new String[tempList.Count];
+                    string[] tempString = new string[tempList.Count];
                     for (int m = 0; m < tempList.Count; m++)
                     {
                         tempString[m] = tempList[m];
@@ -389,7 +430,6 @@ namespace MapVisualizationApp.GUI
             QDlg.mainForm.ListOfProcess = ListOfProcess;
             QDlg.mainForm.SetPlayBarVisible(true);
             QDlg.mainForm.button3.IsEnabled = true;
-            QDlg.mainForm.button4.IsEnabled = true;
             QDlg.mainForm.slider.Value = 0;
             //QDlg.mainForm.Topmost = true;
             QDlg.mainForm.Focus();
@@ -408,25 +448,16 @@ namespace MapVisualizationApp.GUI
                 return;
             }
             QDlg.mainForm.ExtentGeo.Clear();
-            string WKT = string.Empty;
-            int Index_WKT = -1;
-            for (int i = 0; i < dataGridEvent.Columns.Count; i++)
-            {
-                if (dataGridEvent.Columns[i].Header.ToString().Contains("WKT"))
-                {
-                    Index_WKT = i;
-                    break;
-                }
-            }
+            string WKT = string.Empty;         
             try
             {
-                if (Index_WKT >= 0)
+                if (EventGeometries !=null)
                 {                                       
                        Dispatcher.Invoke(new Action(delegate
                         {
                             for (int i = 0; i < dataGridEvent.SelectedItems.Count; i++)
                             {
-                                WKT = (dataGridEvent.SelectedItems[i] as DataRowView).Row[Index_WKT].ToString();
+                                WKT = EventGeometries[(dataGridEvent.SelectedItems[i] as DataRowView)["过程编号"].ToString()];
                                 Dictionary<string, string> rowInfo = new Dictionary<string, string>();
                                 for (int j = 0; j < (dataGridEvent.SelectedItems[i] as DataRowView).Row.ItemArray.Length; j++)
                                 {
@@ -445,12 +476,13 @@ namespace MapVisualizationApp.GUI
                   
                 else
                 {
-                    PUMessageBox.ShowDialog("未找到WKT数据(数据库中无多边形数据)!", "错误", Buttons.OK);
+                    PUMessageBox.ShowDialog("未找到多边形数据", "错误", Buttons.OK);
                     return;
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                PUMessageBox.ShowDialog(ex.Message, "错误", Buttons.OK);
                 return;
             }
             
@@ -467,21 +499,12 @@ namespace MapVisualizationApp.GUI
 
         private void DataGridEvent_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            string WKT = string.Empty;
-            int Index_WKT = -1;
-            for (int i = 0; i < dataGridEvent.Columns.Count; i++)
-            {
-                if (dataGridEvent.Columns[i].Header.ToString().Equals("WKT"))
-                {
-                    Index_WKT = i;
-                    break;
-                }
-            }
+            string WKT = string.Empty;           
             try
             {
-                if (Index_WKT >= 0)
+                if (EventGeometries !=null)
                 {
-                    WKT = (dataGridEvent.SelectedItem as DataRowView).Row[Index_WKT].ToString();
+                    WKT = EventGeometries[(dataGridEvent.SelectedItem as DataRowView)["过程编号"].ToString()];
                     Dispatcher.Invoke(new Action(delegate
                     {
                         List<Esri.ArcGISRuntime.Geometry.Geometry> GeoList = Convertor.Wkt2Geometry(WKT, 4326, 4326);
@@ -491,12 +514,13 @@ namespace MapVisualizationApp.GUI
                 }
                 else
                 {
-                    PUMessageBox.ShowDialog("未找到WKT数据(数据库中无多边形数据)!", "错误");
+                    PUMessageBox.ShowDialog("未找到多边形数据", "错误");
                     return;
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                PUMessageBox.ShowDialog(ex.Message, "错误");
                 return;
             }
             
@@ -504,21 +528,12 @@ namespace MapVisualizationApp.GUI
 
         private void DataGridState_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            string WKT = string.Empty;
-            int Index_WKT = -1;
-            for (int i = 0; i < dataGridState.Columns.Count; i++)
-            {
-                if (dataGridState.Columns[i].Header.ToString().Equals("WKT"))
-                {
-                    Index_WKT = i;
-                    break;
-                }
-            }
+            string WKT = string.Empty;           
             try
             {
-                if (Index_WKT >= 0)
+                if (StateGeometries != null)
                 {
-                    WKT = (dataGridState.SelectedItem as DataRowView).Row[Index_WKT].ToString();
+                    WKT = StateGeometries[(dataGridState.SelectedItem as DataRowView)["状态编号"].ToString()];
                     Dispatcher.Invoke(new Action(delegate
                     {
                         List<Esri.ArcGISRuntime.Geometry.Geometry> GeoList = Convertor.Wkt2Geometry(WKT, 4326, 4326);
@@ -889,25 +904,16 @@ namespace MapVisualizationApp.GUI
                 return;
             }
             QDlg.mainForm.StateGeo.Clear();
-            string WKT = string.Empty;
-            int Index_WKT = -1;
-            for (int i = 0; i < dataGridState.Columns.Count; i++)
-            {
-                if (dataGridState.Columns[i].Header.ToString().Contains("WKT"))
-                {
-                    Index_WKT = i;
-                    break;
-                }
-            }
+            string WKT = string.Empty;          
             try
             {
-                if (Index_WKT >= 0)
+                if (StateGeometries != null)
                 {
                     Dispatcher.Invoke(new Action(delegate
                     {
                         for (int i = 0; i < dataGridState.SelectedItems.Count; i++)
                         {
-                            WKT = (dataGridState.SelectedItems[i] as DataRowView).Row[Index_WKT].ToString();
+                            WKT =StateGeometries[(dataGridState.SelectedItems[i] as DataRowView)["状态编号"].ToString()];
                             Dictionary<string, string> rowInfo = new Dictionary<string, string>();
                             for (int j = 0; j < (dataGridState.SelectedItems[i] as DataRowView).Row.ItemArray.Length; j++)
                             {
@@ -926,7 +932,7 @@ namespace MapVisualizationApp.GUI
 
                 else
                 {
-                    PUMessageBox.ShowDialog("未找到WKT数据(数据库中无多边形数据)!", "错误", Buttons.OK);
+                    PUMessageBox.ShowDialog("未找到多边形数据", "错误", Buttons.OK);
                     return;
                 }
             }
@@ -990,7 +996,7 @@ namespace MapVisualizationApp.GUI
                 }));
                 return;
             }
-            List<String> Keys = new List<String>();
+            List<string> Keys = new List<string>();
             Dispatcher.Invoke(new Action(delegate
             {
                 {
@@ -1013,6 +1019,7 @@ namespace MapVisualizationApp.GUI
                             (((Parm)Parms).dataGrid.ItemsSource as DataView).Table.ImportRow(tempTable.Rows[i]);
                         }
                     }
+                    StoreGeometries(Nodes, ((Parm)Parms).TabIndex);
                     QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
                     this.IsAwaitShow = false;
                 }));
@@ -1073,6 +1080,7 @@ namespace MapVisualizationApp.GUI
                 Parm p = new Parm();
                 p.CQL = CQL;
                 p.dataGrid = dataGridEvent;
+                p.TabIndex = 0; //事件表 0 序列表 1 状态表 2
                 Thread thread = new Thread(new ParameterizedThreadStart(UpdateTableByCQL));
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start(p);
@@ -1100,16 +1108,23 @@ namespace MapVisualizationApp.GUI
                          Const.PERPAGECOUNT.ToString(),
                         SeqSortComboBox.SelectedValue.ToString(),
                         SeqOrderType);
-                    }
-                    Parm p = new Parm();
-                    p.CQL = CQL;
-                    p.dataGrid = dataGridSequence;
-                    Thread thread = new Thread(new ParameterizedThreadStart(UpdateTableByCQL));
-                    thread.SetApartmentState(ApartmentState.STA);
-                    thread.Start(p);
+                    }                  
                 }
+                else
+                {
+                    CQL = string.Format(SeqCQLTemplate, (Const.PERPAGECOUNT * (SequencePageNav.CurrentPage - 1)).ToString(), Const.PERPAGECOUNT.ToString());
+                }
+                Parm p = new Parm();
+                p.CQL = CQL;
+                p.dataGrid = dataGridSequence;
+                p.TabIndex = 1; //事件表 0 序列表 1 状态表 2
+                Thread thread = new Thread(new ParameterizedThreadStart(UpdateTableByCQL));
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start(p);
+
             }
         }
+
         private void StateTableUpdate()
         {
             if (dataGridState.ItemsSource != null)
@@ -1132,14 +1147,63 @@ namespace MapVisualizationApp.GUI
                          Const.PERPAGECOUNT.ToString(),
                         StSortComboBox.SelectedValue.ToString(),
                         StOrderType);
-                    }
-                    Parm p = new Parm();
-                    p.CQL = CQL;
-                    p.dataGrid = dataGridState;
-                    Thread thread = new Thread(new ParameterizedThreadStart(UpdateTableByCQL));
-                    thread.SetApartmentState(ApartmentState.STA);
-                    thread.Start(p);
+                    }                  
                 }
+                else
+                {
+                    CQL = string.Format(StCQLTemplate, (Const.PERPAGECOUNT * (SequencePageNav.CurrentPage - 1)).ToString(), Const.PERPAGECOUNT.ToString());
+                }
+                Parm p = new Parm();
+                p.CQL = CQL;
+                p.dataGrid = dataGridState;
+                p.TabIndex = 2; //事件表 0 序列表 1 状态表 2
+                Thread thread = new Thread(new ParameterizedThreadStart(UpdateTableByCQL));
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start(p);
+            }
+        }
+
+        private void StoreGeometries(List<Dictionary<string,string>>Nodes,int TabIndex)
+        {
+            switch (TabIndex)
+            {
+                case 0:
+                    {
+                        if (EventGeometries != null)
+                        {
+                            EventGeometries.Clear();
+                            for (int i = 0; i < Nodes.Count; i++)
+                            {
+                                EventGeometries.Add(Nodes[i]["PRID"].ToString(), Nodes[i]["geometry"].ToString());
+                            }
+                        }                  
+                        break;
+                    }
+                case 1:
+                    {
+                        if (SeqGeometries != null)
+                        {
+                            SeqGeometries.Clear();
+                            for (int i = 0; i < Nodes.Count; i++)
+                            {
+                                SeqGeometries.Add(Nodes[i]["SQID"].ToString(), Nodes[i]["geometry"].ToString());
+                            }
+                        }
+                        
+                        break;
+                    }
+                case 2:
+                    {
+                        if (StateGeometries != null)
+                        {
+                            StateGeometries.Clear();
+                            for (int i = 0; i < Nodes.Count; i++)
+                            {
+                                StateGeometries.Add(Nodes[i]["STID"].ToString(), Nodes[i]["geometry"].ToString());
+                            }
+                        }
+                        break;
+                    }
             }
         }
 
@@ -1162,6 +1226,38 @@ namespace MapVisualizationApp.GUI
                 SeqOrderBtn.ToolTip = "升序排列";
             }
             SeqTableUpdate();
+        }
+
+        private void StSortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            StateTableUpdate();
+        }
+
+        private void StOrderBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (StOrderType == "ASC")
+            {
+                ImageBrush EnableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/DESC.PNG", UriKind.Relative)));
+                EnableBr.Stretch = Stretch.Uniform;
+                StOrderBtn.Background = EnableBr;
+                StOrderType = "DESC";
+                StOrderBtn.ToolTip = "降序排列";
+            }
+            else if (StOrderType == "DESC")
+            {
+                ImageBrush DisableBr = new ImageBrush(new BitmapImage(new Uri("../../../ICONS/ASC.png", UriKind.Relative)));
+                DisableBr.Stretch = Stretch.Uniform;
+                StOrderBtn.Background = DisableBr;
+                StOrderType = "ASC";
+                StOrderBtn.ToolTip = "升序排列";
+            }
+            StateTableUpdate();
+
+        }
+
+        private void StatePageNav_CurrentPageChanged(object sender, RoutedPropertyChangedEventArgs<int> e)
+        {
+            StateTableUpdate();
         }
     }
 }

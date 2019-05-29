@@ -441,11 +441,16 @@ namespace MapVisualizationApp.GUI
             string CQL = ((string[])CQLS)[0];
             string CountCQL = ((string[])CQLS)[1]; 
             List<Dictionary<string, string>> Nodes = new List<Dictionary<string, string>>();
+            Dictionary<string, string> EventGeometries = new Dictionary<string, string>();
             //转换为DataTable
             DataTable dataTable = new DataTable("Dataset");
             try
             {
                 Nodes = Neo4j64.QueryNodeDataTable((string)CQL);
+                for(int i = 0; i < Nodes.Count; i++)
+                {
+                    EventGeometries.Add(Nodes[i]["PRID"], Nodes[i]["geometry"]);
+                }
             }
             catch (Exception ex)
             {
@@ -472,7 +477,7 @@ namespace MapVisualizationApp.GUI
                 Dispatcher.Invoke(new Action(delegate
                 {
                     dataTable = Convertor.MapNode2DataTable(Nodes, mainForm.FieldsMap, Keys);
-                    FeatureTable tableForm = new FeatureTable(this, dataTable, comboBox1.SelectedValue.ToString(),CQL.ToString(),Convert.ToInt32(CountNodes[0][0]));
+                    FeatureTable tableForm = new FeatureTable(this, dataTable, comboBox1.SelectedValue.ToString(),CQL.ToString(),Convert.ToInt32(CountNodes[0][0]),EventGeometries);
                     FeatureTableList.Add(tableForm);
                     mainForm.SetProgessVisible(Visibility.Hidden);
                     tableForm.Show();
