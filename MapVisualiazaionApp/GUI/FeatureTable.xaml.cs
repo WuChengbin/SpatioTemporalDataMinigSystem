@@ -1143,7 +1143,7 @@ namespace MapVisualizationApp.GUI
                     else
                     {
                         CQL = string.Format(StCQLTemplate.Replace("RETURN STNODE", "RETURN STNODE ORDER BY STNODE.{2} {3}"),
-                        (Const.PERPAGECOUNT * (SequencePageNav.CurrentPage - 1)).ToString(),
+                        (Const.PERPAGECOUNT * (StatePageNav.CurrentPage - 1)).ToString(),
                          Const.PERPAGECOUNT.ToString(),
                         StSortComboBox.SelectedValue.ToString(),
                         StOrderType);
@@ -1151,7 +1151,7 @@ namespace MapVisualizationApp.GUI
                 }
                 else
                 {
-                    CQL = string.Format(StCQLTemplate, (Const.PERPAGECOUNT * (SequencePageNav.CurrentPage - 1)).ToString(), Const.PERPAGECOUNT.ToString());
+                    CQL = string.Format(StCQLTemplate, (Const.PERPAGECOUNT * (StatePageNav.CurrentPage - 1)).ToString(), Const.PERPAGECOUNT.ToString());
                 }
                 Parm p = new Parm();
                 p.CQL = CQL;
