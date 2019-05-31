@@ -5,8 +5,6 @@ using Esri.ArcGISRuntime.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -23,7 +21,6 @@ using Esri.ArcGISRuntime;
 using CefSharp.Wpf;
 using CefSharp;
 using Esri.ArcGISRuntime.UI.Controls;
-using MapVisualizationApp.Class;
 
 namespace MapVisualizationApp
 {
@@ -80,7 +77,7 @@ namespace MapVisualizationApp
            
             Cef.Initialize(settings);
             /*******************************************************/          
-            IsAwaitShow = true;           
+            //IsAwaitShow = true;           
             InitializeComponent();                      
             InitalizeMap();
             Initialize();
@@ -94,8 +91,9 @@ namespace MapVisualizationApp
             // Create new Map with basemap
             Map myMap = new Map();
             myMap.Basemap = Basemap.CreateImageryWithLabelsVector();
-            // Assign the map to the MapView
+           // Assign the map to the MapView
             MyMapView.Map = myMap;
+
             MyMapView.Map.LoadStatusChanged += OnMapsLoadStatusChanged;
             MyMapView.GeoViewTapped += MapViewTapped;
             MyMapView.SelectionProperties.Color = System.Drawing.Color.Cyan;
@@ -106,7 +104,7 @@ namespace MapVisualizationApp
             config.AllowVertexEditing = true;
             config.ResizeMode = SketchResizeMode.Uniform;
             config.AllowMove = true;
-            DataContext = MyMapView.SketchEditor;
+            DataContext = MyMapView.SketchEditor;          
 
         }
 
@@ -298,9 +296,18 @@ namespace MapVisualizationApp
                     this.IsAwaitShow = false;
                 } 
                 else if (e.Status.ToString()=="FailedToLoad")
-                {
+                {                    
                     this.IsAwaitShow = false;
-                    PUMessageBox.ShowDialog("地图加载失败，请检查网络连接！");
+                    string currentPath = System.Windows.Forms.Application.ExecutablePath;
+                    currentPath = currentPath.Replace("/", "\\");
+                    currentPath = currentPath.Substring(0, currentPath.LastIndexOf("bin"));
+                    Uri serviceOfflineUri = new Uri(currentPath + "Data\\SimpleOffline.vtpk");
+                    ArcGISVectorTiledLayer arcGISVectorTiledLayer = new ArcGISVectorTiledLayer(serviceOfflineUri);
+                    // Create new tiled layer from the url
+                    MyMapView.Map = new Map();
+                    MyMapView.Map.Basemap.BaseLayers.Add(arcGISVectorTiledLayer);
+                    MyMapView.Map.InitialViewpoint = new Viewpoint(arcGISVectorTiledLayer.FullExtent.Extent);
+                    PUMessageBox.ShowDialog("地图服务加载失败，已加载离线地图");
                 }
                 else
                 {
@@ -739,6 +746,19 @@ namespace MapVisualizationApp
             MyMapView.Map = myMap;
         }
 
+        private void PUTreeViewItem_PreviewMouseLeftButton_15(object sender, MouseButtonEventArgs e)
+        {
+            string currentPath = System.Windows.Forms.Application.ExecutablePath;
+            currentPath = currentPath.Replace("/", "\\");
+            currentPath = currentPath.Substring(0, currentPath.LastIndexOf("bin"));
+            Uri serviceOfflineUri = new Uri(currentPath + "Data\\SimpleOffline.vtpk");
+            ArcGISVectorTiledLayer arcGISVectorTiledLayer = new ArcGISVectorTiledLayer(serviceOfflineUri);
+            // Create new tiled layer from the url
+            MyMapView.Map = new Map();
+            MyMapView.Map.Basemap.BaseLayers.Add(arcGISVectorTiledLayer);
+            MyMapView.Map.InitialViewpoint = new Viewpoint(arcGISVectorTiledLayer.FullExtent.Extent);
+        }
+
         private void PUWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             string url = browser.Address;
@@ -860,5 +880,6 @@ namespace MapVisualizationApp
             }
             
         }
+
     }
 }

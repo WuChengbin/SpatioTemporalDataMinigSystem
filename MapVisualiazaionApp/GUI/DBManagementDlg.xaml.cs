@@ -576,13 +576,14 @@ namespace MapVisualizationApp.GUI
                 Dispatcher.Invoke(new Action(delegate
                 {
                     index = LayerComboBox.SelectedIndex;
+                    this.IsAwaitShow = true;
                 }));
                 try
                 {
                     string CQL = string.Empty;
                     Dispatcher.Invoke(new Action(delegate
                     {
-                        CQL = "match (n)-[:RTREE_ROOT]-()-[:RTREE_CHILD*]->()-[:RTREE_REFERENCE*]->(m) where n.layer=\"" + LayerComboBox.SelectedValue + "\" set m:" + NodeLabel.Text + " remove m.ID";
+                        CQL = "match (n)-[:RTREE_ROOT]-()-[:RTREE_CHILD*0..]->()-[:RTREE_REFERENCE*]->(m) where n.layer=\"" + LayerComboBox.SelectedValue + "\" set m:" + NodeLabel.Text + " remove m.ID";
                     }));
                     try
                     {
@@ -591,6 +592,7 @@ namespace MapVisualizationApp.GUI
                         {
                             Dispatcher.Invoke(new Action(delegate
                             {
+                                this.IsAwaitShow = false;
                                 PUMessageBox.ShowDialog("当前用户无权限！");
                                 return;
                             }));
@@ -600,6 +602,7 @@ namespace MapVisualizationApp.GUI
                             Neo4j64.ExcuteCQL(CQL);
                             Dispatcher.Invoke(new Action(delegate
                             {
+                                this.IsAwaitShow = false;
                                 PUMessageBox.ShowDialog("标签已更新!");
                             }));
                         }
@@ -608,6 +611,7 @@ namespace MapVisualizationApp.GUI
                     {
                         Dispatcher.Invoke(new Action(delegate
                         {
+                            this.IsAwaitShow = false;
                             PUMessageBox.ShowDialog("标签更新失败:" + ex.Message);
                             return;
                         }));
@@ -636,13 +640,14 @@ namespace MapVisualizationApp.GUI
                 Dispatcher.Invoke(new Action(delegate
                 {
                     index = LayerComboBox.SelectedIndex;
+                    this.IsAwaitShow = true;
                 }));
                 try
                 {
                     string CQL = string.Empty;
                     Dispatcher.Invoke(new Action(delegate
                     {
-                        CQL = "match (n)-[:RTREE_ROOT]-()-[:RTREE_CHILD*]->()-[:RTREE_REFERENCE*]->(m) where n.layer=\"" + LayerComboBox.SelectedValue + "\" remove m:" + NodeLabel.Text;
+                        CQL = "match (n)-[:RTREE_ROOT]-()-[:RTREE_CHILD*0..]->()-[:RTREE_REFERENCE*]->(m) where n.layer=\"" + LayerComboBox.SelectedValue + "\" remove m:" + NodeLabel.Text;
                     }));
                     try
                     {
@@ -650,6 +655,7 @@ namespace MapVisualizationApp.GUI
                         {
                             Dispatcher.Invoke(new Action(delegate
                             {
+                                this.IsAwaitShow = false;
                                 PUMessageBox.ShowDialog("当前用户无权限！");
                                 return;
                             }));
@@ -660,6 +666,7 @@ namespace MapVisualizationApp.GUI
                             Dispatcher.Invoke(new Action(delegate
                             {
                                 NodeLabel.Text = "";
+                                this.IsAwaitShow = false;
                                 PUMessageBox.ShowDialog("标签已删除!");
                             }));
                         }
@@ -668,6 +675,7 @@ namespace MapVisualizationApp.GUI
                     {
                         Dispatcher.Invoke(new Action(delegate
                         {
+                            this.IsAwaitShow = false;
                             PUMessageBox.ShowDialog("删除失败:" + ex.Message);
                             return;
                         }));
@@ -813,6 +821,7 @@ namespace MapVisualizationApp.GUI
             dialog.Multiselect = true;
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                SeqSeqFileTextBox.Text = "";
                 string[] files = dialog.FileNames;
                 for(int i = 0; i < files.Length; i++)
                 {
@@ -828,6 +837,7 @@ namespace MapVisualizationApp.GUI
             dialog.Title = "打开状态-状态关系文件";         
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                StStFileTextBox.Text = "";
                 string[] files = dialog.FileNames;
                 for (int i = 0; i < files.Length; i++)
                 {
@@ -1164,24 +1174,34 @@ namespace MapVisualizationApp.GUI
                         {
                             StreamReader sr = new StreamReader(files[i]);
                             string line;
-                            sr.ReadLine();//跳过第一行
-                            while ((line = sr.ReadLine()) != null)
+                            string Header=sr.ReadLine();//跳过第一行
+                            if (Header.Split(',').Length > 3)
                             {
-                                string[] temp = line.Split(',');
-                                Dictionary<string, string> lineDic = new Dictionary<string, string>();
-                                if (temp.Length == 3)
+                                Dispatcher.Invoke(new Action(delegate
                                 {
-                                    lineDic.Add("FromID", temp[0]);
-                                    lineDic.Add("ToID", temp[1]);
-                                    lineDic.Add("Property", temp[2]);
-                                }
-                                if (temp.Length == 2)
+                                    PUMessageBox.ShowDialog("序列-序列关系文件格式不正确，已跳过");
+                                }));                            
+                            }
+                            else
+                            {
+                                while ((line = sr.ReadLine()) != null)
                                 {
-                                    lineDic.Add("FromID", temp[0]);
-                                    lineDic.Add("ToID", temp[1]);
-                                    lineDic.Add("Property", "Belong");
+                                    string[] temp = line.Split(',');
+                                    Dictionary<string, string> lineDic = new Dictionary<string, string>();
+                                    if (temp.Length == 3)
+                                    {
+                                        lineDic.Add("FromID", temp[0]);
+                                        lineDic.Add("ToID", temp[1]);
+                                        lineDic.Add("Property", temp[2]);
+                                    }
+                                    if (temp.Length == 2)
+                                    {
+                                        lineDic.Add("FromID", temp[0]);
+                                        lineDic.Add("ToID", temp[1]);
+                                        lineDic.Add("Property", "Belong");
+                                    }
+                                    SeqSeqRel.Add(lineDic);
                                 }
-                                SeqSeqRel.Add(lineDic);
                             }
                         }
                     }
@@ -1197,25 +1217,35 @@ namespace MapVisualizationApp.GUI
                         {
                             StreamReader sr = new StreamReader(files[i]);
                             string line;
-                            sr.ReadLine();//跳过第一行
-                            while ((line = sr.ReadLine()) != null)
-                            {
-                                string[] temp = line.Split(',');
-                                Dictionary<string, string> lineDic = new Dictionary<string, string>();
-                                if (temp.Length == 3)
+                            string Header = sr.ReadLine();//跳过第一行
+                            if (Header.Split(',').Length > 3)
+                            {                               
+                                Dispatcher.Invoke(new Action(delegate
                                 {
-                                    lineDic.Add("FromID", temp[0]);
-                                    lineDic.Add("ToID", temp[1]);
-                                    lineDic.Add("Property", temp[2]);
-                                }
-                                if (temp.Length == 2)
-                                {
-                                    lineDic.Add("FromID", temp[0]);
-                                    lineDic.Add("ToID", temp[1]);
-                                    lineDic.Add("Property", "Belong");
-                                }
-                                StStRel.Add(lineDic);
+                                    PUMessageBox.ShowDialog("状态-状态关系文件格式不正确，已跳过");
+                                }));
                             }
+                            else
+                            {
+                                while ((line = sr.ReadLine()) != null)
+                                {
+                                    string[] temp = line.Split(',');
+                                    Dictionary<string, string> lineDic = new Dictionary<string, string>();
+                                    if (temp.Length == 3)
+                                    {
+                                        lineDic.Add("FromID", temp[0]);
+                                        lineDic.Add("ToID", temp[1]);
+                                        lineDic.Add("Property", temp[2]);
+                                    }
+                                    if (temp.Length == 2)
+                                    {
+                                        lineDic.Add("FromID", temp[0]);
+                                        lineDic.Add("ToID", temp[1]);
+                                        lineDic.Add("Property", "Belong");
+                                    }
+                                    StStRel.Add(lineDic);
+                                }
+                            }                          
                         }
                     }                   
                 }
@@ -1682,19 +1712,23 @@ namespace MapVisualizationApp.GUI
 
         private void LayerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (LayerComboBox.SelectedIndex > 0)
+            {
+                this.IsAwaitShow = true;             
+            }
             Thread t = new Thread(() =>
             {
                 int index = -1;
                 Dispatcher.Invoke(new Action(delegate
-                {
-                    index = LayerComboBox.SelectedIndex;
-                }));
+                {                   
+                    index = LayerComboBox.SelectedIndex;                  
+                }));               
                 if (Neo4j64.isConnected && index > 0)
                 {
                     string CQL = string.Empty;
                     Dispatcher.Invoke(new Action(delegate
                     {
-                        CQL = "match (n)-[:RTREE_ROOT]-()-[:RTREE_CHILD*]->()-[:RTREE_REFERENCE*]->(m) where n.layer=\"" + LayerComboBox.SelectedValue + "\" WITH m limit 1 UNWIND labels(m) as LABELS return LABELS";
+                        CQL = "match (n)-[:RTREE_ROOT]-()-[:RTREE_CHILD*0..]->()-[:RTREE_REFERENCE*]->(m) where n.layer=\"" + LayerComboBox.SelectedValue + "\" WITH m limit 1 UNWIND labels(m) as LABELS return LABELS";
                     }));
                     List<List<string>> Res = new List<List<string>>();
                     try
@@ -1733,6 +1767,11 @@ namespace MapVisualizationApp.GUI
                         LabelBubble.Visibility = Visibility.Hidden;
                     }));
                 }
+                Dispatcher.Invoke(new Action(delegate
+                {
+                    this.IsAwaitShow = false;
+                }));
+                
             });
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
@@ -1772,13 +1811,14 @@ namespace MapVisualizationApp.GUI
                 {
                     NodeLabel = LabelRelComboBox.SelectedValue.ToString();
                 }));
+                //模板不需要修改
                 string CQL1 = "MATCH (p:{0}) WITH p, size ((p) -[:SRelationship]-> ()) AS outDegree, size ((p) < -[:SRelationship]-()) AS inDegree WHERE inDegree=0 AND outDegree=1 set p.StateType = 0";
                 string CQL2 = "MATCH (p:{0}) WITH p, size ((p) -[:SRelationship]-> ()) AS outDegree, size ((p) < -[:SRelationship]-()) AS inDegree WHERE inDegree=1 AND outDegree=0 set p.StateType = 1";
                 string CQL3 = "MATCH (p:{0}) WITH p, size ((p) -[:SRelationship]-> ()) AS outDegree, size ((p) < -[:SRelationship]-()) AS inDegree WHERE inDegree=1 AND outDegree>1 or inDegree=0 AND outDegree>1  set p.StateType = 2";
                 string CQL4 = "MATCH (p:{0}) WITH p, size ((p) -[:SRelationship]-> ()) AS outDegree, size ((p) < -[:SRelationship]-()) AS inDegree WHERE inDegree>1 AND outDegree=1 or inDegree>1 AND outDegree=0  set p.StateType = 3";
                 string CQL5 = "MATCH (p:{0}) WITH p, size ((p) -[:SRelationship]-> ()) AS outDegree, size ((p) < -[:SRelationship]-()) AS inDegree WHERE inDegree>1 AND outDegree>1 set p.StateType = 4";
                 string CQL6 = "MATCH (p:{0}) WITH p, size ((p) -[:SRelationship]-> ()) AS outDegree, size ((p) < -[:SRelationship]-()) AS inDegree WHERE inDegree=1 AND outDegree=1 set p.StateType = 5";
-
+                
                 try
                 {
                     if (!Neo4j64.isAdminRole)

@@ -118,6 +118,7 @@
                 <pu:PUTreeViewItem Header="Oceans" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_12" ></pu:PUTreeViewItem>
                 <pu:PUTreeViewItem Header="Topographic(Raster)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_13" ></pu:PUTreeViewItem>
                 <pu:PUTreeViewItem Header="Topographic(Vector)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_14" ></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="SimpleOffline(Vector)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_15" ></pu:PUTreeViewItem>
             </pu:PUTreeViewItem>
             <pu:PUTreeViewItem Header="帮助文档"  Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3" >
                 <pu:PUTreeViewItem Header="Neo4j（CQL）文档" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown"></pu:PUTreeViewItem>
@@ -160,7 +161,7 @@
                             </pu:PUBubble.Background>
                             <pu:PUTextBox x:Name="textBox" HorizontalAlignment="Left" Height="255" TextWrapping="Wrap" VerticalAlignment="Top" Width="338" Background="#05FFFFFF" Foreground="White" BorderThickness="0" BorderCornerRadius="6" IsReadOnly="True" VerticalScrollBarVisibility="Visible" Margin="0,10,0,0"/>
                         </pu:PUBubble>
-                        <pu:PUSlider x:Name="slider" Margin="67,0,60,27" VerticalAlignment="Bottom" Visibility="Hidden" ValueChanged="Slider_ValueChanged" CoverBrush="#FF77CA00" Foreground="#4C77CA00"/>
+                        <pu:PUSlider x:Name="slider" Margin="60,0,60,27" VerticalAlignment="Bottom" Visibility="Hidden" ValueChanged="Slider_ValueChanged" CoverBrush="#FF77CA00" Foreground="#4C77CA00"/>
                         <pu:PUButton x:Name="buttonLeft" Margin="37,0,0,25" VerticalAlignment="Bottom" Width="25" Height="25" BorderBrush="#00707070" Visibility="Hidden" Click="ButtonLeft_Click" Content="" BorderCornerRadius="3" HorizontalAlignment="Left" ToolTip="←">
                             <Button.Background>
                                 <ImageBrush ImageSource="ICONS/LEFT.png" Stretch="Uniform"/>

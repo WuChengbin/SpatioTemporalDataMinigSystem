@@ -25,7 +25,7 @@
                     <Label x:Name="labe2" Content="端口：" HorizontalAlignment="Left" Margin="16,46,0,0" VerticalAlignment="Top"  Width="87" Foreground="White"/>
                     <Label x:Name="labe3" Content="用户名：" HorizontalAlignment="Left" Margin="16,81,0,0" VerticalAlignment="Top" Width="87" Foreground="White"/>
                     <Label x:Name="labe4" Content="密码：" HorizontalAlignment="Left" Margin="16,114,0,0" VerticalAlignment="Top" Width="87" Foreground="White"/>
-                    <pu:PUTextBox x:Name="textBoxAddress" HorizontalAlignment="Left"  Margin="103,14,0,0" TextWrapping="Wrap" Text="10.105.3.33" VerticalAlignment="Top" Height="25" Width="191"   BorderCornerRadius="5"/>
+                    <pu:PUTextBox x:Name="textBoxAddress" HorizontalAlignment="Left"  Margin="103,14,0,0" TextWrapping="Wrap" Text="10.126.11.67" VerticalAlignment="Top" Height="25" Width="191"   BorderCornerRadius="5"/>
                     <pu:PUTextBox x:Name="textBoxPort" HorizontalAlignment="Left"  Margin="103,48,0,0" TextWrapping="Wrap" Text="7687" VerticalAlignment="Top" Width="191" Height="25" BorderCornerRadius="5"/>
                     <pu:PUTextBox x:Name="textBoxUser" HorizontalAlignment="Left"  Margin="103,82,0,0" TextWrapping="Wrap" Text="test" VerticalAlignment="Top" Width="191"  Height="25" BorderCornerRadius="5"/>
                     <pu:PUPasswordBox x:Name="textBoxPwd" HorizontalAlignment="Left" Margin="103,116,0,0" VerticalAlignment="Top" Width="191"  Password="test" IsShowPwdButtonShow="True" BorderCornerRadius="5"/>

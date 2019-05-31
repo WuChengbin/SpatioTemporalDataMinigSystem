@@ -204,7 +204,7 @@ namespace MapVisualizationApp.GUI
                 else
                 {
                     QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
-                    PUMessageBox.ShowDialog("未找到编号列表(数据库中PRID未定义)!", "错误", Buttons.Yes);
+                    PUMessageBox.ShowDialog("未找到编号列!", "错误", Buttons.Yes);
                     //System.Windows.MessageBox.Show("未找到编号列表(数据库中PRID未定义)!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
@@ -307,7 +307,7 @@ namespace MapVisualizationApp.GUI
                 }
                 else
                 {
-                    PUMessageBox.ShowDialog("未找到编号列表(数据库中PRID未定义)!", "错误", Buttons.Yes);
+                    PUMessageBox.ShowDialog("未找到编号列!", "错误", Buttons.Yes);
                     return;
                 }
             }
@@ -476,7 +476,7 @@ namespace MapVisualizationApp.GUI
                   
                 else
                 {
-                    PUMessageBox.ShowDialog("未找到多边形数据", "错误", Buttons.OK);
+                    PUMessageBox.ShowDialog("未找到多边形数据!", "错误", Buttons.OK);
                     return;
                 }
             }
@@ -499,7 +499,7 @@ namespace MapVisualizationApp.GUI
 
         private void DataGridEvent_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            string WKT = string.Empty;           
+           string WKT = string.Empty;           
             try
             {
                 if (EventGeometries !=null)
@@ -514,13 +514,12 @@ namespace MapVisualizationApp.GUI
                 }
                 else
                 {
-                    PUMessageBox.ShowDialog("未找到多边形数据", "错误");
+                    PUMessageBox.ShowDialog("未找到多边形数据!", "错误");
                     return;
                 }
             }
-            catch(Exception ex)
+            catch
             {
-                PUMessageBox.ShowDialog(ex.Message, "错误");
                 return;
             }
             
@@ -543,7 +542,7 @@ namespace MapVisualizationApp.GUI
                 }
                 else
                 {
-                    PUMessageBox.ShowDialog("未找到WKT数据(数据库中无多边形数据)!", "错误");
+                    PUMessageBox.ShowDialog("未找到多边形数据!", "错误");
                     return;
                 }
             }
@@ -932,7 +931,7 @@ namespace MapVisualizationApp.GUI
 
                 else
                 {
-                    PUMessageBox.ShowDialog("未找到多边形数据", "错误", Buttons.OK);
+                    PUMessageBox.ShowDialog("未找到多边形数据!", "错误", Buttons.OK);
                     return;
                 }
             }

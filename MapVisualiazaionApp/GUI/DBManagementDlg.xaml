@@ -161,7 +161,7 @@
                                     <ImageBrush ImageSource="/MapVisualizationApp;component/ICONS/DELETE_16px.png" Stretch="None"/>
                                 </pu:PUButton.Background>
                             </pu:PUButton>
-                            <pu:PUButton x:Name="SeqStDelBtn" Content="" Margin="37,218,588,162" BorderCornerRadius="6" ToolTip="删除序列-状态关系"  Click="SeqStDelBtn_Click">
+                            <pu:PUButton x:Name="SeqStDelBtn" Content="" Margin="40,218,585,162" BorderCornerRadius="6" ToolTip="删除序列-状态关系"  Click="SeqStDelBtn_Click">
                                 <pu:PUButton.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
