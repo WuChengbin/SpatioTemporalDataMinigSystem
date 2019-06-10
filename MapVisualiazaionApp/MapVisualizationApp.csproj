@@ -312,6 +312,9 @@
     <Resource Include="ICONS\ASC.png" />
     <Resource Include="ICONS\DESC.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ICONS\EXTENT.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Esri.ArcGISRuntime.WPF.100.4.0\build\net461\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\packages\Esri.ArcGISRuntime.WPF.100.4.0\build\net461\Esri.ArcGISRuntime.WPF.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

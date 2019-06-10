@@ -306,7 +306,8 @@ namespace MapVisualizationApp
                     // Create new tiled layer from the url
                     MyMapView.Map = new Map();
                     MyMapView.Map.Basemap.BaseLayers.Add(arcGISVectorTiledLayer);
-                    MyMapView.Map.InitialViewpoint = new Viewpoint(arcGISVectorTiledLayer.FullExtent.Extent);
+                    MyMapView.Map.MinScale = 70000000;
+                    //MyMapView.Map.InitialViewpoint = new Viewpoint(arcGISVectorTiledLayer.FullExtent.Extent);
                     PUMessageBox.ShowDialog("地图服务加载失败，已加载离线地图");
                 }
                 else
@@ -562,6 +563,7 @@ namespace MapVisualizationApp
         private void ButtonPlay_Click(object sender, RoutedEventArgs e)
         {
             //play
+            if (slider.Value >= slider.Maximuim) slider.Value = slider.Minimuim;
             buttonPlay.Visibility = Visibility.Hidden;
             buttonPause.Visibility = Visibility.Visible;
             //buttonLeft.IsEnabled = false;
@@ -755,8 +757,9 @@ namespace MapVisualizationApp
             ArcGISVectorTiledLayer arcGISVectorTiledLayer = new ArcGISVectorTiledLayer(serviceOfflineUri);
             // Create new tiled layer from the url
             MyMapView.Map = new Map();
+            MyMapView.Map.MinScale = 70000000;
             MyMapView.Map.Basemap.BaseLayers.Add(arcGISVectorTiledLayer);
-            MyMapView.Map.InitialViewpoint = new Viewpoint(arcGISVectorTiledLayer.FullExtent.Extent);
+            //MyMapView.Map.InitialViewpoint = new Viewpoint(arcGISVectorTiledLayer.FullExtent.Extent);
         }
 
         private void PUWindow_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -881,5 +884,9 @@ namespace MapVisualizationApp
             
         }
 
+        private async void ButtonExtent_Click(object sender, RoutedEventArgs e)
+        {
+            await MyMapView.SetViewpointGeometryAsync(MyMapView.Map.InitialViewpoint.TargetGeometry);
+        }
     }
 }

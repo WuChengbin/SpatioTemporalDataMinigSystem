@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Data;
 using Panuon.UI;
+using System.Net.NetworkInformation;
 
 //此类调用了PanuonUI WPF对话框
 //WinForm或原生WPF注释PUMessageBox即可
@@ -29,15 +30,36 @@ namespace MarineSTMiningSystem.DataOP
         /// <param name="pwd">数据库密码</param>
         public static void Neo4jConnect(string ip,string portNum, string user, string pwd)
         {
+            bool isIP = true;
             IPAddress ipAddress=null;
-            ipAddress = IPAddress.Parse(ip);
-             
-            IPEndPoint point = new IPEndPoint(ipAddress, int.Parse(portNum));
-            using (Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            try
             {
-                sock.Connect(point);
-                sock.Close();
+                ipAddress = IPAddress.Parse(ip);
+                
             }
+            catch
+            {
+                isIP = false;
+                Ping p = new Ping();
+                PingOptions options = new PingOptions();
+                options.DontFragment = true;
+                string data = "Test Data";
+                byte[] buffer = Encoding.ASCII.GetBytes(data);
+                PingReply reply = p.Send(ip, 1000, buffer, options);
+                if (reply.Status != IPStatus.Success)
+                {
+                    throw new Exception("无法与：" + ip + "建立连接，请检查远程主机是否可用");
+                }
+            }
+            if (isIP)
+            {
+                IPEndPoint point = new IPEndPoint(ipAddress, int.Parse(portNum));
+                using (Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                {
+                    sock.Connect(point);
+                    sock.Close();
+                }
+            }           
             string url = "bolt://" + ip + ":" + portNum;
             neoDirver = GraphDatabase.Driver(url, AuthTokens.Basic(user, pwd), new Config { ConnectionTimeout = TimeSpan.FromSeconds(5), ConnectionAcquisitionTimeout = TimeSpan.FromSeconds(10) });
             var session = neoDirver.Session(AccessMode.Read);

@@ -20,6 +20,11 @@
     </pu:PUWindow.Icon>
     <Grid>
         <ToolBar x:Name="toolBar" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Background="#FF007ACC" Width="249">
+            <pu:PUButton x:Name="buttonExtent"  Height="20"  VerticalAlignment="Top" Width="25"  ToolTip="缩放至全图" Content="" Click="ButtonExtent_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="ICONS/EXTENT.png" Stretch="Uniform"/>
+                </Button.Background>
+            </pu:PUButton>
             <pu:PUButton x:Name="button"  Height="20"  VerticalAlignment="Top" Width="25" Command="{Binding CompleteCommand}" IsEnabledChanged="button_IsEnabledChanged" ToolTip="完成绘制" Content="">
                 <Button.Background>
                     <ImageBrush ImageSource="ICONS/FINISH_ENABLE_12px.png" Stretch="None"/>
@@ -161,7 +166,7 @@
                             </pu:PUBubble.Background>
                             <pu:PUTextBox x:Name="textBox" HorizontalAlignment="Left" Height="255" TextWrapping="Wrap" VerticalAlignment="Top" Width="338" Background="#05FFFFFF" Foreground="White" BorderThickness="0" BorderCornerRadius="6" IsReadOnly="True" VerticalScrollBarVisibility="Visible" Margin="0,10,0,0"/>
                         </pu:PUBubble>
-                        <pu:PUSlider x:Name="slider" Margin="60,0,60,27" VerticalAlignment="Bottom" Visibility="Hidden" ValueChanged="Slider_ValueChanged" CoverBrush="#FF77CA00" Foreground="#4C77CA00"/>
+                        <pu:PUSlider x:Name="slider" Margin="60,0,60,27" VerticalAlignment="Bottom" Visibility="Hidden" ValueChanged="Slider_ValueChanged" CoverBrush="#FF00AD97" Foreground="#7F00AD97"/>
                         <pu:PUButton x:Name="buttonLeft" Margin="37,0,0,25" VerticalAlignment="Bottom" Width="25" Height="25" BorderBrush="#00707070" Visibility="Hidden" Click="ButtonLeft_Click" Content="" BorderCornerRadius="3" HorizontalAlignment="Left" ToolTip="←">
                             <Button.Background>
                                 <ImageBrush ImageSource="ICONS/LEFT.png" Stretch="Uniform"/>
@@ -188,9 +193,9 @@
                                 <ImageBrush ImageSource="ICONS/PAUSE.png" Stretch="None"/>
                             </Button.Background>
                         </pu:PUButton>
-                        <Label x:Name="labelStart" Content="StartLabel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,208,41" Foreground="#FF77CA00" FontWeight="Bold" Visibility="Hidden" Height="25" FontSize="11.5" HorizontalContentAlignment="Right"/>
-                        <Label x:Name="labelEnd" Content="EndLabel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,65,41" Foreground="#FF77CA00" FontWeight="Bold" Visibility="Hidden" Height="25" FontSize="11.5"/>
-                        <Label x:Name="labelSep" Content="/" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,193,41" Foreground="#FF77CA00" FontWeight="Bold" Visibility="Hidden" Height="25" FontSize="11.5"/>
+                        <Label x:Name="labelStart" Content="StartLabel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,208,41" Foreground="#FF00AD97" FontWeight="Bold" Visibility="Hidden" Height="25" FontSize="11.5" HorizontalContentAlignment="Right"/>
+                        <Label x:Name="labelEnd" Content="EndLabel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,65,41" Foreground="#FF00AD97" FontWeight="Bold" Visibility="Hidden" Height="25" FontSize="11.5"/>
+                        <Label x:Name="labelSep" Content="/" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,193,41" Foreground="#FF00AD97" FontWeight="Bold" Visibility="Hidden" Height="25" FontSize="11.5"/>
                     </Grid>
 
                 </pu:PUTabItem>

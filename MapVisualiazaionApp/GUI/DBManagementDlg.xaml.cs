@@ -1274,7 +1274,11 @@ namespace MapVisualizationApp.GUI
 
                     Dispatcher.Invoke(new Action(delegate
                     {
-                        EtSeqDelBtn.Visibility = Visibility.Visible;
+                        if (Neo4j64.HasRelation(EventLabelValue,SeqLabelValue))
+                        {
+                            EtSeqDelBtn.Visibility = Visibility.Visible;
+                        }
+                        
                     }));
 
                 }
@@ -1302,7 +1306,11 @@ namespace MapVisualizationApp.GUI
 
                     Dispatcher.Invoke(new Action(delegate
                     {
-                        SeqStDelBtn.Visibility = Visibility.Visible;
+                        if (Neo4j64.HasRelation(SeqLabelValue, StLabelValue))
+                        {
+                            SeqStDelBtn.Visibility = Visibility.Visible;
+                        }
+                        
                     }));
 
                 }
@@ -1339,7 +1347,11 @@ namespace MapVisualizationApp.GUI
                     });
                     Dispatcher.Invoke(new Action(delegate
                     {
-                        SeqSeqDelBtn.Visibility = Visibility.Visible;
+                        if (Neo4j64.HasRelation(SeqLabelValue, SeqLabelValue))
+                        {
+                            SeqSeqDelBtn.Visibility = Visibility.Visible;
+                        }
+
                     }));
 
                 }
@@ -1376,7 +1388,10 @@ namespace MapVisualizationApp.GUI
                     });
                     Dispatcher.Invoke(new Action(delegate
                     {
-                        StStDelBtn.Visibility = Visibility.Visible;
+                        if (Neo4j64.HasRelation(StLabelValue, StLabelValue))
+                        {
+                            StStDelBtn.Visibility = Visibility.Visible;
+                        }                     
                     }));
                 }
                 Dispatcher.Invoke(new Action(delegate
