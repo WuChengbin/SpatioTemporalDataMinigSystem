@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DE8BE98F-11EE-4035-9D9F-F779C26178F1}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ClusterAlgorithmForms</RootNamespace>
+    <AssemblyName>ClusterAlgorithmForms</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\MarineSTMiningSystem\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Theme64x.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="gdalconst_csharp">
+      <HintPath>..\MarineSTMiningSystem\bin\Debug\gdalconst_csharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gdal_csharp">
+      <HintPath>..\MarineSTMiningSystem\bin\Debug\gdal_csharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GeoAPI, Version=1.7.4.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
+      <HintPath>..\packages\GeoAPI.1.7.4\lib\net45\GeoAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Neo4j.Driver, Version=1.6.70.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Neo4j.Driver.1.6.1\lib\net452\Neo4j.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite, Version=1.14.0.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NetTopologySuite.1.14\lib\net45\NetTopologySuite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ogr_csharp">
+      <HintPath>..\MarineSTMiningSystem\bin\Debug\ogr_csharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MarineSTMiningSystem\bin\Debug\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="osr_csharp">
+      <HintPath>..\MarineSTMiningSystem\bin\Debug\osr_csharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PowerCollections, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2573bf8a1bdddcd5, processorArchitecture=MSIL">
+      <HintPath>..\packages\NetTopologySuite.1.14\lib\net45\PowerCollections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClusterPolygon.cs" />
+    <Compile Include="ClusterShp.cs" />
+    <Compile Include="Convertor.cs" />
+    <Compile Include="DataRaster.cs" />
+    <Compile Include="Dual.cs" />
+    <Compile Include="duall.cs" />
+    <Compile Include="GUI\EventRelToDatabaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\EventRelToDatabaseForm.designer.cs">
+      <DependentUpon>EventRelToDatabaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\EventToDatabaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\EventToDatabaseForm.designer.cs">
+      <DependentUpon>EventToDatabaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FormClusterRelation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FormClusterRelation.Designer.cs">
+      <DependentUpon>FormClusterRelation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FormClusterShpAddAttribute.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FormClusterShpAddAttribute.Designer.cs">
+      <DependentUpon>FormClusterShpAddAttribute.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FormDDBSC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FormDDBSC.Designer.cs">
+      <DependentUpon>FormDDBSC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FormRoCMSAC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FormRoCMSAC.Designer.cs">
+      <DependentUpon>FormRoCMSAC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FormRoSTCM.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FormRoSTCM.Designer.cs">
+      <DependentUpon>FormRoSTCM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FormSpatialKmean.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FormSpatialKmean.Designer.cs">
+      <DependentUpon>FormSpatialKmean.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FormSTDBSCAN.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FormSTDBSCAN.Designer.cs">
+      <DependentUpon>FormSTDBSCAN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FormSTSNN.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FormSTSNN.Designer.cs">
+      <DependentUpon>FormSTSNN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FormTimeKmean.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FormTimeKmean.Designer.cs">
+      <DependentUpon>FormTimeKmean.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FormTrajectoryClustering.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FormTrajectoryClustering.Designer.cs">
+      <DependentUpon>FormTrajectoryClustering.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FormWeightKmean.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FormWeightKmean.Designer.cs">
+      <DependentUpon>FormWeightKmean.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ShpToDatabaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ShpToDatabaseForm.designer.cs">
+      <DependentUpon>ShpToDatabaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProcessHDFByGdal\HDF4Operator.cs" />
+    <Compile Include="ProcessHDFByGdal\Neo4j64.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoSTCM.cs" />
+    <Compile Include="ST-Cluster.cs" />
+    <Compile Include="StrajectoryPair.cs" />
+    <Compile Include="Sub-Trajectory.cs" />
+    <Compile Include="Trajectory.cs" />
+    <Compile Include="TrajectoryNode.cs" />
+    <EmbeddedResource Include="GUI\EventRelToDatabaseForm.resx">
+      <DependentUpon>EventRelToDatabaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\EventToDatabaseForm.resx">
+      <DependentUpon>EventToDatabaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FormClusterRelation.resx">
+      <DependentUpon>FormClusterRelation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FormClusterShpAddAttribute.resx">
+      <DependentUpon>FormClusterShpAddAttribute.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FormDDBSC.resx">
+      <DependentUpon>FormDDBSC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FormRoCMSAC.resx">
+      <DependentUpon>FormRoCMSAC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FormRoSTCM.resx">
+      <DependentUpon>FormRoSTCM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FormSpatialKmean.resx">
+      <DependentUpon>FormSpatialKmean.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FormSTDBSCAN.resx">
+      <DependentUpon>FormSTDBSCAN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FormSTSNN.resx">
+      <DependentUpon>FormSTSNN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FormTimeKmean.resx">
+      <DependentUpon>FormTimeKmean.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FormTrajectoryClustering.resx">
+      <DependentUpon>FormTrajectoryClustering.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FormWeightKmean.resx">
+      <DependentUpon>FormWeightKmean.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ShpToDatabaseForm.resx">
+      <DependentUpon>ShpToDatabaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Theme64x.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MarineSTMiningSystem\MarineSTMiningSystem.csproj">
+      <Project>{5b8ad603-12c1-405b-812d-2ee399679d2c}</Project>
+      <Name>MarineSTMiningSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StormEvent\StormEvent.csproj">
+      <Project>{57d81ef8-177d-42d3-aa6c-66726ce41470}</Project>
+      <Name>StormEvent</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

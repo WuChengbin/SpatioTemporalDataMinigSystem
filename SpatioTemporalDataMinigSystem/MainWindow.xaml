@@ -1,0 +1,218 @@
+﻿<pu:PUWindow x:Class="STDMS.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"        
+        xmlns:pu="clr-namespace:Panuon.UI;assembly=Panuon.UI"
+        xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+        mc:Ignorable="d"
+        Title="海洋时空挖掘与分析系统（V2.0.0）" Height="915" Width="1564.075" WindowStartupLocation="CenterScreen" Closed="Window_Closed"  NavbarBackground="#FF293956" NavbarHeight="30" AnimationStyle="Scale" Foreground="White" SizeChanged="PUWindow_SizeChanged">
+    <pu:PUWindow.Background>
+        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+            <GradientStop Color="#FF34B8AD" Offset="1"/>
+            <GradientStop Color="#FF2B4E88" Offset="0.097"/>
+            <GradientStop Color="#FF29B8AD" Offset="0.893"/>
+        </LinearGradientBrush>
+    </pu:PUWindow.Background>
+    <pu:PUWindow.Icon>
+        <Image Source="/ICONS/Theme.png"></Image>
+    </pu:PUWindow.Icon>
+    <Grid>
+        <ToolBar x:Name="toolBar" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Background="#FF007ACC" Width="249">
+            <pu:PUButton x:Name="buttonExtent"  Height="20"  VerticalAlignment="Top" Width="25"  ToolTip="缩放至全图" Content="" Click="ButtonExtent_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="ICONS/EXTENT.png" Stretch="Uniform"/>
+                </Button.Background>
+            </pu:PUButton>
+            <pu:PUButton x:Name="button"  Height="20"  VerticalAlignment="Top" Width="25" Command="{Binding CompleteCommand}" IsEnabledChanged="button_IsEnabledChanged" ToolTip="完成绘制" Content="">
+                <Button.Background>
+                    <ImageBrush ImageSource="ICONS/FINISH_ENABLE_12px.png" Stretch="None"/>
+                </Button.Background>
+            </pu:PUButton>
+            <pu:PUButton x:Name="button1" Content="" Height="20"  VerticalAlignment="Top" Width="25" Command="{Binding UndoCommand}" ToolTip="撤销" IsEnabledChanged="button1_IsEnabledChanged">
+                <Button.Background>
+                    <ImageBrush ImageSource="ICONS/UNDO_ENABLE_12px.png" Stretch="None"/>
+                </Button.Background>
+            </pu:PUButton>
+            <pu:PUButton x:Name="button2" Content="" Height="20"  VerticalAlignment="Top" Width="25" Command="{Binding RedoCommand}" ToolTip="重做" IsEnabledChanged="button2_IsEnabledChanged" >
+                <Button.Background>
+                    <ImageBrush ImageSource="ICONS/REDO_ENABLE_12px.png" Stretch="None"/>
+                </Button.Background>
+            </pu:PUButton>
+            <pu:PUButton x:Name="button3" Content="" Height="20"  VerticalAlignment="Top" Width="25" ToolTip="清除图形" IsEnabledChanged="Button3_IsEnabledChanged" Click="Button3_Click"  >
+                <Button.Background>
+                    <ImageBrush ImageSource="ICONS/ERASER_ENABLE_12px.png" Stretch="None"/>
+                </Button.Background>
+            </pu:PUButton>
+
+        </ToolBar>
+        <StatusBar Height="20" VerticalAlignment="Bottom" Background="#FFCA5100" Foreground="White">
+            <StatusBarItem x:Name="StatusInformationLabel" Content="海洋时空挖掘与分析系统（V2.0.0）" Height="20" VerticalAlignment="Top" Margin="0" Width="356" HorizontalAlignment="Left" />
+            <StatusBarItem x:Name="StatusProcess" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="185" Margin="0,-2,0,0"  >
+                <pu:PULoading x:Name="StatusProgressBar" Height="18" Width="256" Visibility="Hidden" IsRunning="False"/>
+            </StatusBarItem>
+            <StatusBarItem x:Name="StatusLocationLabel" Content="经度:{0} 纬度:{1}" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="Hidden" />
+        </StatusBar>
+        <pu:PUTreeView x:Name="Menu" Width="249" HorizontalAlignment="Left" Background="White" Margin="0,25,0,20" Foreground="#A5FFFFFF" BorderThickness="4" BorderBrush="#FF293A56" CoverBrush="#3352B1DD" ChoosedBrush="#2F52B1DD" FontWeight="Bold">
+            <pu:PUTreeViewItem Header="数据库管理" Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
+                <pu:PUTreeViewItem Header="连接数据库" PreviewMouseLeftButtonDown="PUTreeViewItem_Connect"/>
+                <pu:PUTreeViewItem Header="断开数据库" PreviewMouseLeftButtonDown="PUTreeViewItem_DisConnect"></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="管理员系统">
+                    <pu:PUTreeView  Foreground="#A5FFFFFF" CoverBrush="#3352B1DD" ChoosedBrush="#2F52B1DD" FontWeight="Bold" Width="250">
+                        <pu:PUTreeViewItem Header="Neo4j管理" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_2" ></pu:PUTreeViewItem>
+                    </pu:PUTreeView>
+                </pu:PUTreeViewItem>
+            </pu:PUTreeViewItem>
+            <pu:PUTreeViewItem Header="时空信息提取" Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
+                <pu:PUTreeViewItem Header="暴雨事件"></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="海洋热浪"></pu:PUTreeViewItem>
+            </pu:PUTreeViewItem>
+            <pu:PUTreeViewItem Header="时空异常探测" Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
+            </pu:PUTreeViewItem>
+            <pu:PUTreeViewItem Header="时空聚类挖掘" Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
+                <pu:PUTreeViewItem Header="面向栅格聚类">
+                    <pu:PUTreeView  Foreground="#A5FFFFFF" CoverBrush="#3352B1DD" ChoosedBrush="#2F52B1DD" FontWeight="Bold" Width="250">
+                        <pu:PUTreeViewItem Header="基础聚类">
+                            <pu:PUTreeViewItem Header="K-MEAN"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="DBSCAN"></pu:PUTreeViewItem>
+                        </pu:PUTreeViewItem>
+                        <pu:PUTreeViewItem Header="空间聚类">
+                            <pu:PUTreeViewItem Header="RoCMSAC"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="DDBSC"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="加权K-MEAN"></pu:PUTreeViewItem>
+                        </pu:PUTreeViewItem>
+                        <pu:PUTreeViewItem Header="时间序列聚类">
+                            <pu:PUTreeViewItem Header="K-MEAN"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="DBSCAN"></pu:PUTreeViewItem>
+                        </pu:PUTreeViewItem>
+                        <pu:PUTreeViewItem Header="时空聚类">
+                            <pu:PUTreeViewItem Header="DcSTCA"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="ST-SNN"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="ST-DBSCAN"></pu:PUTreeViewItem>
+                        </pu:PUTreeViewItem>
+                    </pu:PUTreeView>
+                </pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="面向对象聚类"/>
+                <pu:PUTreeViewItem Header="面向过程聚类"/>
+            </pu:PUTreeViewItem>
+            <pu:PUTreeViewItem Header="时空关联模式" Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
+                <pu:PUTreeViewItem Header="时空关联挖掘事物表构建">
+                    <pu:PUTreeView  Foreground="#A5FFFFFF" CoverBrush="#3352B1DD" ChoosedBrush="#2F52B1DD" FontWeight="Bold" Width="250">
+                        <pu:PUTreeViewItem Header="对象事物表"></pu:PUTreeViewItem>
+                        <pu:PUTreeViewItem Header="事件事物表"></pu:PUTreeViewItem>
+                    </pu:PUTreeView>
+                </pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="面向栅格关联模式挖掘"/>
+                <pu:PUTreeViewItem Header="面向对象关联模式挖掘"/>
+                <pu:PUTreeViewItem Header="面向过程关联模式挖掘"/>
+            </pu:PUTreeViewItem>
+            <pu:PUTreeViewItem Header="时空数据查询"  Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3" PreviewMouseLeftButtonDown="PUTreeViewItem_Query"></pu:PUTreeViewItem>
+            <pu:PUTreeViewItem Header="更换地图" Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
+                <pu:PUTreeViewItem Header="Streets (Raster)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_1" />
+                <pu:PUTreeViewItem Header="Streets (Vector)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_2"></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="Streets - Night (Vector)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_3"/>
+                <pu:PUTreeViewItem Header="Imagery (Raster)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_4" ></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="Imagery with Labels (Raster)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_5"/>
+                <pu:PUTreeViewItem Header="Imagery with Labels (Vector)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_6"></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="Dark Gray Canvas (Vector)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_7"/>
+                <pu:PUTreeViewItem Header="Light Gray Canvas (Raster)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_8"></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="Light Gray Canvas (Vector)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_9"/>
+                <pu:PUTreeViewItem Header="Navigation (Vector)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_10" ></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="OpenStreetMap (Raster)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_11"/>
+                <pu:PUTreeViewItem Header="Oceans" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_12" ></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="Topographic(Raster)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_13" ></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="Topographic(Vector)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_14" ></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="SimpleOffline(Vector)" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButton_15" ></pu:PUTreeViewItem>
+            </pu:PUTreeViewItem>
+            <pu:PUTreeViewItem Header="帮助文档"  Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3" >
+                <pu:PUTreeViewItem Header="Neo4j（CQL）文档" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown"></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="程序使用说明" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_1" ></pu:PUTreeViewItem>
+            </pu:PUTreeViewItem>
+            <pu:PUTreeViewItem Header="关于我们"  Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3" PreviewMouseLeftButtonDown="PUTreeViewItem_About" ></pu:PUTreeViewItem>
+        </pu:PUTreeView>
+        <Grid Margin="249,0,0,21" Background="#FF007ACC" >
+            <pu:PUTabControl Background="#00000000" SelectedBrush="White" BorderBrush="#FF293A56" Foreground="#CC9C9999" FontWeight="Bold" Margin="0,1,0,-1">
+                <pu:PUTabItem Header="数据可视化">
+                    <Grid Background="#FFE5E5E5">
+                        <esri:MapView x:Name="MyMapView" BorderThickness="0,0,4,4" BorderBrush="#FF293A56" MouseMove="MyMapView_MouseMove" >
+                            <esri:MapView.ContextMenu>
+                                <pu:PUContextMenu x:Name="MainWindowContextMenu" Visibility="Hidden" IsOpen="False" CoverBrush="#4C293A56" Background="#CCFFFFFF">
+                                    <pu:PUContextMenuItem Header="移除选中对象" Click="PUContextMenuItem_Click" >
+                                        <pu:PUContextMenuItem.Icon>
+                                            <Image Source="ICONS/DELETE_24px.png" Stretch="Uniform"></Image>
+                                        </pu:PUContextMenuItem.Icon>
+                                    </pu:PUContextMenuItem>
+                                </pu:PUContextMenu>
+                            </esri:MapView.ContextMenu>
+                        </esri:MapView>
+                        <pu:PUBubble x:Name="puBubble"
+                                         Margin="0,10,10,0"
+                                         AnglePosition="Right"
+                                         BorderCornerRadius="6" Foreground="White" BorderBrush="#FF3E95CC"  Height="280" VerticalAlignment="Top" HorizontalAlignment="Right" Width="338" Visibility="Hidden">
+                            <pu:PUBubble.CoverBrush>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#BF34B8AD" Offset="1"/>
+                                    <GradientStop Color="#F22B4E88" Offset="0.097"/>
+                                    <GradientStop Color="#CC29B8AD" Offset="0.893"/>
+                                </LinearGradientBrush>
+                            </pu:PUBubble.CoverBrush>
+                            <pu:PUBubble.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#A534B8AD" Offset="1"/>
+                                    <GradientStop Color="#E52B4E88" Offset="0.097"/>
+                                    <GradientStop Color="#B229B8AD" Offset="0.893"/>
+                                </LinearGradientBrush>
+                            </pu:PUBubble.Background>
+                            <pu:PUTextBox x:Name="textBox" HorizontalAlignment="Left" Height="255" TextWrapping="Wrap" VerticalAlignment="Top" Width="338" Background="#05FFFFFF" Foreground="White" BorderThickness="0" BorderCornerRadius="6" IsReadOnly="True" VerticalScrollBarVisibility="Visible" Margin="0,10,0,0"/>
+                        </pu:PUBubble>
+                        <pu:PUSlider x:Name="slider" Margin="60,0,60,27" VerticalAlignment="Bottom" Visibility="Hidden" ValueChanged="Slider_ValueChanged" CoverBrush="#FF00AD97" Foreground="#7F00AD97"/>
+                        <pu:PUButton x:Name="buttonLeft" Margin="37,0,0,25" VerticalAlignment="Bottom" Width="25" Height="25" BorderBrush="#00707070" Visibility="Hidden" Click="ButtonLeft_Click" Content="" BorderCornerRadius="3" HorizontalAlignment="Left" ToolTip="←">
+                            <Button.Background>
+                                <ImageBrush ImageSource="ICONS/LEFT.png" Stretch="Uniform"/>
+                            </Button.Background>
+
+                        </pu:PUButton>
+                        <pu:PUButton x:Name="buttonPlay" Margin="10,0,0,25" VerticalAlignment="Bottom" Width="25" Height="25" BorderBrush="#00707070" Visibility="Hidden" Click="ButtonPlay_Click" Content="" BorderCornerRadius="3" HorizontalAlignment="Left" ToolTip="播放">
+                            <Button.Background>
+                                <ImageBrush ImageSource="ICONS/PLAY.png" Stretch="Uniform"/>
+                            </Button.Background>
+                        </pu:PUButton>
+                        <pu:PUButton x:Name="buttonStop"  HorizontalAlignment="Right" Margin="0,0,10,25" VerticalAlignment="Bottom" Width="25" Height="25" BorderBrush="#00707070" Visibility="Hidden" Click="ButtonStop_Click" Content="" BorderCornerRadius="3" ToolTip="退出播放">
+                            <Button.Background>
+                                <ImageBrush ImageSource="ICONS/STOP.png" Stretch="None"/>
+                            </Button.Background>
+                        </pu:PUButton>
+                        <pu:PUButton x:Name="buttonRight"  HorizontalAlignment="Right" Margin="0,0,37,25" VerticalAlignment="Bottom" Width="25" Height="25" BorderBrush="#00707070" Visibility="Hidden" Click="ButtonRight_Click" Content="" BorderCornerRadius="3" ToolTip="→">
+                            <Button.Background>
+                                <ImageBrush ImageSource="ICONS/RIGHT.png" Stretch="Uniform"/>
+                            </Button.Background>
+                        </pu:PUButton>
+                        <pu:PUButton x:Name="buttonPause" Margin="10,0,0,25" VerticalAlignment="Bottom" Width="25" Height="25" BorderBrush="#00707070" Visibility="Hidden" Click="ButtonPause_Click" Content="" BorderCornerRadius="3" HorizontalAlignment="Left" ToolTip="暂停">
+                            <Button.Background>
+                                <ImageBrush ImageSource="ICONS/PAUSE.png" Stretch="None"/>
+                            </Button.Background>
+                        </pu:PUButton>
+                        <Label x:Name="labelStart" Content="StartLabel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,208,41" Foreground="#FF00AD97" FontWeight="Bold" Visibility="Hidden" Height="25" FontSize="11.5" HorizontalContentAlignment="Right"/>
+                        <Label x:Name="labelEnd" Content="EndLabel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,65,41" Foreground="#FF00AD97" FontWeight="Bold" Visibility="Hidden" Height="25" FontSize="11.5"/>
+                        <Label x:Name="labelSep" Content="/" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,193,41" Foreground="#FF00AD97" FontWeight="Bold" Visibility="Hidden" Height="25" FontSize="11.5"/>
+                    </Grid>
+
+                </pu:PUTabItem>
+                <pu:PUTabItem Header="关系可视化">
+                    <Grid>
+                        <Grid.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF34B8AD" Offset="1"/>
+                                <GradientStop Color="#FF2B4E88" Offset="0.097"/>
+                                <GradientStop Color="#FF29B8AD" Offset="0.893"/>
+                            </LinearGradientBrush>
+                        </Grid.Background>
+                        <Grid HorizontalAlignment="Left" Height="461" VerticalAlignment="Top" Width="689"/>
+                        <cefSharp:ChromiumWebBrowser x:Name="browser"></cefSharp:ChromiumWebBrowser>
+                    </Grid>
+                </pu:PUTabItem>
+            </pu:PUTabControl>
+        </Grid>
+    </Grid>
+</pu:PUWindow>
