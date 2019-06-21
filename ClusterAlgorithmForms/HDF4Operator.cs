@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Forms.ProcessHDFByGdal
+namespace ClusterAlgorithm
 {
     // 定义HDF4 SD接口函数库的文件位置
     

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatioTemporalDataMinigSystem", "SpatioTemporalDataMinigSystem\SpatioTemporalDataMinigSystem.csproj", "{FC5C0831-A7ED-4CF7-9A63-85A3D92265ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClusterAlgorithm", "ClusterAlgorithmForms\ClusterAlgorithm.csproj", "{DE8BE98F-11EE-4035-9D9F-F779C26178F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{FC5C0831-A7ED-4CF7-9A63-85A3D92265ED}.Release|x64.Build.0 = Release|x64
 		{FC5C0831-A7ED-4CF7-9A63-85A3D92265ED}.Release|x86.ActiveCfg = Release|x86
 		{FC5C0831-A7ED-4CF7-9A63-85A3D92265ED}.Release|x86.Build.0 = Release|x86
+		{DE8BE98F-11EE-4035-9D9F-F779C26178F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE8BE98F-11EE-4035-9D9F-F779C26178F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE8BE98F-11EE-4035-9D9F-F779C26178F1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DE8BE98F-11EE-4035-9D9F-F779C26178F1}.Debug|x64.Build.0 = Debug|Any CPU
+		{DE8BE98F-11EE-4035-9D9F-F779C26178F1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DE8BE98F-11EE-4035-9D9F-F779C26178F1}.Debug|x86.Build.0 = Debug|Any CPU
+		{DE8BE98F-11EE-4035-9D9F-F779C26178F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE8BE98F-11EE-4035-9D9F-F779C26178F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE8BE98F-11EE-4035-9D9F-F779C26178F1}.Release|x64.ActiveCfg = Release|Any CPU
+		{DE8BE98F-11EE-4035-9D9F-F779C26178F1}.Release|x64.Build.0 = Release|Any CPU
+		{DE8BE98F-11EE-4035-9D9F-F779C26178F1}.Release|x86.ActiveCfg = Release|Any CPU
+		{DE8BE98F-11EE-4035-9D9F-F779C26178F1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

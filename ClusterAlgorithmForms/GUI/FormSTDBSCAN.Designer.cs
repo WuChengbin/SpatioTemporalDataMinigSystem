@@ -1,4 +1,4 @@
-﻿namespace Forms.GUI
+﻿namespace ClusterAlgorithm.GUI
 {
     partial class FormSTDASCAN
     {
@@ -94,6 +94,7 @@
             this.buttonCancel.TabIndex = 82;
             this.buttonCancel.Text = "取消";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // buttonSave
             // 

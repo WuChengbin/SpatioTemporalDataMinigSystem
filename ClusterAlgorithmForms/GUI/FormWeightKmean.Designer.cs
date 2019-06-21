@@ -1,4 +1,4 @@
-﻿namespace ClusterAlgorithmForms.GUI
+﻿namespace ClusterAlgorithm.GUI
 {
     partial class FormWeightKmean
     {

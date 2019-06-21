@@ -287,6 +287,7 @@ namespace STDMS.GUI
 
         private void MenuItem2_Click(object sender, RoutedEventArgs e)
         {
+            QDlg.mainForm.SetProgessVisible(Visibility.Visible);
             #region 获取节点
             string PRID = string.Empty;
             int Index_PRID = -1;
@@ -319,120 +320,136 @@ namespace STDMS.GUI
             string SQCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->(SQNODE) RETURN SQNODE order by datetime(replace(SQNODE.Time,' ','T'))";
             string STCQL = "MATCH(NODE:" + this.Title + "{PRID:" + PRID + "})-[:Belong]->()-[:Belong]->(STNODE) RETURN STNODE order by datetime(replace(STNODE.Time,' ','T'))";
             string STREL = "MATCH(NODE: " + this.Title + "{ PRID: " + PRID + "})-[:Belong]->() -[:Belong]->(STNODE1)-[R]->(STNODE2) RETURN STNODE1.STID,R.StateAction,STNODE2.STID limit 100";
-            
-            try
-            {
-                SqNode = Neo4j64.QueryNodeDataTable(SQCQL);
-                StNode = Neo4j64.QueryNodeDataTable(STCQL);
-            }
-            catch (Exception ex)
-            {
-                PUMessageBox.ShowDialog("查询错误: " + ex.Message, "错误", Buttons.OK);
-                return;
-            }
-            #endregion
-            if (SqNode==null || StNode == null)
-            {
-                PUMessageBox.ShowDialog("未找到该事件的序列或状态，请检查图结构是否完整！");
-                return;
-            }
 
-            #region 排列多边形
-            //按时间使用交错数组存储事件信息
-            //每个内存单元存储WKT格式的多边形信息
-            //同一列表示同一时刻出现的多边形
-            //ListOfProcess中存储的数据用于展示
-            //---------------------------------------------------------
-            //|  t1  |  t2  |  t3  |  t4  |  t5  |  t6  |  t7  |  t8  |
-            //---------------------------------------------------------
-            //|  t1  |  t2  |  t3  |  t4  |  t5  |  t6  |      |  t8  |
-            //-------------------------------------------      --------
-            //       |  t2  |      |  t4  |
-            //       --------      --------
-            //
-            //ListOfTime（Hashset)用于处理存储唯一值
-            //---------------------------------------------------------
-            //|  t1  |  t2  |  t3  |  t4  |  t5  |  t6  |  t7  |  t8  |
-            //---------------------------------------------------------
-            //
-            HashSet<string> ListOfTime = new HashSet<string>();
-            List<string[]> ListOfProcess = new List<string[]>();
-            if (ListOfProcess.Count > 0) ListOfProcess.Clear();
-            if (ListOfTime.Count > 0) ListOfTime.Clear();
-
-
-            List<string> tempList = new List<string>();
-            tempList.Add(StNode[0]["geometry"]/* + "-" + StNode[0]["Time"]*/);
-            for (int i = 1; i < StNode.Count; i++)
-            {
-
-                if (StNode[i]["Time"] == StNode[i - 1]["Time"])
+            Thread thread = new Thread(() => {
+                try
                 {
-                    tempList.Add(StNode[i]["geometry"]/*+"-"+StNode[i]["Time"]*/);
-                    ListOfTime.Add(StNode[i]["Time"]);
+                    SqNode = Neo4j64.QueryNodeDataTable(SQCQL);
+                    StNode = Neo4j64.QueryNodeDataTable(STCQL);
                 }
-                else
+                catch (Exception ex)
                 {
-                    ListOfTime.Add(StNode[i - 1]["Time"]);
-                    ListOfTime.Add(StNode[i]["Time"]);
-
-                    string[] tempString = new string[tempList.Count];
-                    for (int m = 0; m < tempList.Count; m++)
+                    Dispatcher.Invoke(new Action(delegate
                     {
-                        tempString[m] = tempList[m];
-                    }
-                    ListOfProcess.Add(tempString);
-                    tempList.Clear();
-                    tempList.Add(StNode[i]["geometry"]/* + "-" + StNode[i]["Time"]*/);
+                        PUMessageBox.ShowDialog("查询错误: " + ex.Message, "错误", Buttons.OK);
+                        return;
+                    }));
+                        
                 }
-                if (i == StNode.Count - 1)
+                #endregion
+                if (SqNode == null || StNode == null)
                 {
-                    string[] tempString = new string[tempList.Count];
-                    for (int m = 0; m < tempList.Count; m++)
+                    Dispatcher.Invoke(new Action(delegate
                     {
-                        tempString[m] = tempList[m];
+                        PUMessageBox.ShowDialog("未找到该事件的序列或状态，请检查图结构是否完整！");
+                        return;
+                    }));                   
+                }
+
+                #region 排列多边形
+                //按时间使用交错数组存储事件信息
+                //每个内存单元存储WKT格式的多边形信息
+                //同一列表示同一时刻出现的多边形
+                //ListOfProcess中存储的数据用于展示
+                //---------------------------------------------------------
+                //|  t1  |  t2  |  t3  |  t4  |  t5  |  t6  |  t7  |  t8  |
+                //---------------------------------------------------------
+                //|  t1  |  t2  |  t3  |  t4  |  t5  |  t6  |      |  t8  |
+                //-------------------------------------------      --------
+                //       |  t2  |      |  t4  |
+                //       --------      --------
+                //
+                //ListOfTime（Hashset)用于处理存储唯一值
+                //---------------------------------------------------------
+                //|  t1  |  t2  |  t3  |  t4  |  t5  |  t6  |  t7  |  t8  |
+                //---------------------------------------------------------
+                //
+                HashSet<string> ListOfTime = new HashSet<string>();
+                List<string[]> ListOfProcess = new List<string[]>();
+                if (ListOfProcess.Count > 0) ListOfProcess.Clear();
+                if (ListOfTime.Count > 0) ListOfTime.Clear();
+
+
+                List<string> tempList = new List<string>();
+                tempList.Add(StNode[0]["geometry"]/* + "-" + StNode[0]["Time"]*/);
+                for (int i = 1; i < StNode.Count; i++)
+                {
+
+                    if (StNode[i]["Time"] == StNode[i - 1]["Time"])
+                    {
+                        tempList.Add(StNode[i]["geometry"]/*+"-"+StNode[i]["Time"]*/);
+                        ListOfTime.Add(StNode[i]["Time"]);
                     }
-                    ListOfProcess.Add(tempString);
-                    ListOfTime.Add(StNode[i]["Time"]);
-                }
-            }
-            #endregion
-            Thread WebThread = new Thread(new ParameterizedThreadStart(UpdateWebRelation));
-            WebThread.SetApartmentState(ApartmentState.STA);
-            WebThread.Start(STREL);
-            string WKT = string.Empty;
-            int Index_WKT = -1;
-            for (int i = 0; i < dataGridEvent.Columns.Count; i++)
-            {
-                if (dataGridEvent.Columns[i].Header.ToString().Equals("WKT"))
-                {
-                    Index_WKT = i;
-                    break;
-                }
-            }
-            try
-            {
-                if (Index_WKT >= 0)
-                {
-                    WKT = (dataGridEvent.SelectedItem as DataRowView).Row[Index_WKT].ToString();
-                    List<Esri.ArcGISRuntime.Geometry.Geometry> GeoList = Convertor.Wkt2Geometry(WKT, 4326, 4326);
-                    Esri.ArcGISRuntime.Geometry.Geometry UnionGeo = GeometryEngine.Union(GeoList);
-                    QDlg.mainForm.MyMapView.SetViewpointGeometryAsync(UnionGeo, 200);
-                }
-            }
-            catch
-            {
+                    else
+                    {
+                        ListOfTime.Add(StNode[i - 1]["Time"]);
+                        ListOfTime.Add(StNode[i]["Time"]);
 
-            }
+                        string[] tempString = new string[tempList.Count];
+                        for (int m = 0; m < tempList.Count; m++)
+                        {
+                            tempString[m] = tempList[m];
+                        }
+                        ListOfProcess.Add(tempString);
+                        tempList.Clear();
+                        tempList.Add(StNode[i]["geometry"]/* + "-" + StNode[i]["Time"]*/);
+                    }
+                    if (i == StNode.Count - 1)
+                    {
+                        string[] tempString = new string[tempList.Count];
+                        for (int m = 0; m < tempList.Count; m++)
+                        {
+                            tempString[m] = tempList[m];
+                        }
+                        ListOfProcess.Add(tempString);
+                        ListOfTime.Add(StNode[i]["Time"]);
+                    }
+                }
+                #endregion
+                Thread WebThread = new Thread(new ParameterizedThreadStart(UpdateWebRelation));
+                WebThread.SetApartmentState(ApartmentState.STA);
+                WebThread.Start(STREL);
+                Dispatcher.Invoke(new Action(delegate
+                {
+                    string WKT = string.Empty;
+                    int Index_WKT = -1;
+                    for (int i = 0; i < dataGridEvent.Columns.Count; i++)
+                    {
+                        if (dataGridEvent.Columns[i].Header.ToString().Equals("WKT"))
+                        {
+                            Index_WKT = i;
+                            break;
+                        }
+                    }
+                    try
+                    {
+                        if (Index_WKT >= 0)
+                        {
+                            WKT = (dataGridEvent.SelectedItem as DataRowView).Row[Index_WKT].ToString();
+                            List<Esri.ArcGISRuntime.Geometry.Geometry> GeoList = Convertor.Wkt2Geometry(WKT, 4326, 4326);
+                            Esri.ArcGISRuntime.Geometry.Geometry UnionGeo = GeometryEngine.Union(GeoList);
+                            QDlg.mainForm.MyMapView.SetViewpointGeometryAsync(UnionGeo, 200);
+                        }
+                    }
+                    catch
+                    {
 
-            QDlg.mainForm.ListOfTime = ListOfTime;
-            QDlg.mainForm.ListOfProcess = ListOfProcess;
-            QDlg.mainForm.SetPlayBarVisible(true);
-            QDlg.mainForm.button3.IsEnabled = true;
-            QDlg.mainForm.slider.Value = 0;
-            //QDlg.mainForm.Topmost = true;
-            QDlg.mainForm.Focus();
-            
+                    }
+
+                    QDlg.mainForm.ListOfTime = ListOfTime;
+                    QDlg.mainForm.ListOfProcess = ListOfProcess;
+                    QDlg.mainForm.SetPlayBarVisible(true);
+                    QDlg.mainForm.button3.IsEnabled = true;
+                    QDlg.mainForm.slider.Value = 0;
+                    //QDlg.mainForm.Topmost = true;
+                    QDlg.mainForm.Focus();
+                    QDlg.mainForm.SetProgessVisible(Visibility.Hidden);
+
+                }));
+               
+            });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
         }
 
         private void MenuItem3_Click(object sender, RoutedEventArgs e)

@@ -1,4 +1,4 @@
-﻿using Forms.ProcessHDFByGdal;
+﻿using ClusterAlgorithm;
 using OSGeo.GDAL;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Forms.GUI
+namespace ClusterAlgorithm.GUI
 {
     public partial class FormSTDASCAN : Form
     {
@@ -335,6 +335,11 @@ namespace Forms.GUI
 
             }
 
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

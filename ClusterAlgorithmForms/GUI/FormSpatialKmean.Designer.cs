@@ -1,4 +1,4 @@
-﻿namespace Forms.GUI
+﻿namespace ClusterAlgorithm.GUI
 {
     partial class FormSpatialKmean
     {

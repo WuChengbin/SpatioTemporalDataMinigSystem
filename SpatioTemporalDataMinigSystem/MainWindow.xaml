@@ -74,22 +74,22 @@
                 <pu:PUTreeViewItem Header="面向栅格聚类">
                     <pu:PUTreeView  Foreground="#A5FFFFFF" CoverBrush="#3352B1DD" ChoosedBrush="#2F52B1DD" FontWeight="Bold" Width="250">
                         <pu:PUTreeViewItem Header="基础聚类">
-                            <pu:PUTreeViewItem Header="K-MEAN"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="K-MEAN" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_8"></pu:PUTreeViewItem>
                             <pu:PUTreeViewItem Header="DBSCAN"></pu:PUTreeViewItem>
                         </pu:PUTreeViewItem>
                         <pu:PUTreeViewItem Header="空间聚类">
-                            <pu:PUTreeViewItem Header="RoCMSAC"></pu:PUTreeViewItem>
-                            <pu:PUTreeViewItem Header="DDBSC"></pu:PUTreeViewItem>
-                            <pu:PUTreeViewItem Header="加权K-MEAN"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="RoCMSAC" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_4"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="DDBSC" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_5"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="加权K-MEAN" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_6"></pu:PUTreeViewItem>
                         </pu:PUTreeViewItem>
                         <pu:PUTreeViewItem Header="时间序列聚类">
-                            <pu:PUTreeViewItem Header="K-MEAN"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="K-MEAN" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_7"></pu:PUTreeViewItem>
                             <pu:PUTreeViewItem Header="DBSCAN"></pu:PUTreeViewItem>
                         </pu:PUTreeViewItem>
                         <pu:PUTreeViewItem Header="时空聚类">
-                            <pu:PUTreeViewItem Header="DcSTCA"></pu:PUTreeViewItem>
-                            <pu:PUTreeViewItem Header="ST-SNN"></pu:PUTreeViewItem>
-                            <pu:PUTreeViewItem Header="ST-DBSCAN"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="DcSTCA" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_10"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="ST-SNN" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_3"></pu:PUTreeViewItem>
+                            <pu:PUTreeViewItem Header="ST-DBSCAN" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_9"></pu:PUTreeViewItem>
                         </pu:PUTreeViewItem>
                     </pu:PUTreeView>
                 </pu:PUTreeViewItem>
@@ -97,10 +97,10 @@
                 <pu:PUTreeViewItem Header="面向过程聚类"/>
             </pu:PUTreeViewItem>
             <pu:PUTreeViewItem Header="时空关联模式" Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
-                <pu:PUTreeViewItem Header="时空关联挖掘事物表构建">
+                <pu:PUTreeViewItem Header="时空关联挖掘事务表构建">
                     <pu:PUTreeView  Foreground="#A5FFFFFF" CoverBrush="#3352B1DD" ChoosedBrush="#2F52B1DD" FontWeight="Bold" Width="250">
-                        <pu:PUTreeViewItem Header="对象事物表"></pu:PUTreeViewItem>
-                        <pu:PUTreeViewItem Header="事件事物表"></pu:PUTreeViewItem>
+                        <pu:PUTreeViewItem Header="对象事务表"></pu:PUTreeViewItem>
+                        <pu:PUTreeViewItem Header="事件事务表"></pu:PUTreeViewItem>
                     </pu:PUTreeView>
                 </pu:PUTreeViewItem>
                 <pu:PUTreeViewItem Header="面向栅格关联模式挖掘"/>

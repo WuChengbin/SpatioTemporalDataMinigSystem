@@ -21,6 +21,8 @@ using CefSharp.Wpf;
 using CefSharp;
 using Esri.ArcGISRuntime.UI.Controls;
 using STDMS.GUI;
+using ClusterAlgorithm.GUI;
+//using ClusterAlgorithm.GUI;
 
 namespace STDMS
 {
@@ -887,6 +889,63 @@ namespace STDMS
         private async void ButtonExtent_Click(object sender, RoutedEventArgs e)
         {
             await MyMapView.SetViewpointGeometryAsync(MyMapView.Map.InitialViewpoint.TargetGeometry);
+        }
+
+        private void PUTreeViewItem_PreviewMouseLeftButtonDown_3(object sender, MouseButtonEventArgs e)
+        {
+            FormSTSNN formSTSNN = new FormSTSNN();
+            formSTSNN.Show();
+            formSTSNN.TopMost = true;
+        }
+
+        private void PUTreeViewItem_PreviewMouseLeftButtonDown_4(object sender, MouseButtonEventArgs e)
+        {
+            FormRoCMSAC formRoCMSAC = new FormRoCMSAC();
+            formRoCMSAC.Show();
+            formRoCMSAC.TopMost = true;
+        }
+
+        private void PUTreeViewItem_PreviewMouseLeftButtonDown_5(object sender, MouseButtonEventArgs e)
+        {
+            FormDDBSC formDDBSC = new FormDDBSC();
+            formDDBSC.Show();
+            formDDBSC.TopMost = true;
+        }
+
+        private void PUTreeViewItem_PreviewMouseLeftButtonDown_6(object sender, MouseButtonEventArgs e)
+        {
+            FormSpatialKmean formSpatialKmean = new FormSpatialKmean();
+            formSpatialKmean.Show();
+            formSpatialKmean.TopMost = true;
+        }
+
+        private void PUTreeViewItem_PreviewMouseLeftButtonDown_7(object sender, MouseButtonEventArgs e)
+        {
+            FormWeightKmean formWeightKmean = new FormWeightKmean();
+            formWeightKmean.Show();
+            formWeightKmean.TopMost = true;
+        }
+
+        private void PUTreeViewItem_PreviewMouseLeftButtonDown_8(object sender, MouseButtonEventArgs e)
+        {
+            //这个程序的SpatialKmean是普通K-Mean聚类？
+            FormSpatialKmean formSpatialKmean = new FormSpatialKmean();
+            formSpatialKmean.Show();
+            formSpatialKmean.TopMost = true;
+        }
+
+        private void PUTreeViewItem_PreviewMouseLeftButtonDown_9(object sender, MouseButtonEventArgs e)
+        {
+            FormSTDASCAN formSTDASCAN = new FormSTDASCAN();
+            formSTDASCAN.Show();
+            formSTDASCAN.TopMost = true;
+        }
+
+        private void PUTreeViewItem_PreviewMouseLeftButtonDown_10(object sender, MouseButtonEventArgs e)
+        {
+            FormRoSTCM formRoSTCM = new FormRoSTCM();
+            formRoSTCM.Show();
+            formRoSTCM.TopMost = true;
         }
     }
 }

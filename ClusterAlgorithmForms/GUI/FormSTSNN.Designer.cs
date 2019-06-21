@@ -1,4 +1,4 @@
-﻿namespace Forms.GUI
+﻿namespace ClusterAlgorithm.GUI
 {
     partial class FormSTSNN
     {
@@ -307,6 +307,7 @@
             this.buttonCancel.TabIndex = 70;
             this.buttonCancel.Text = "取消";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // FormSTSNN
             // 
@@ -325,6 +326,7 @@
             this.Controls.Add(this.textBoxFilePath);
             this.Controls.Add(this.groupBoxFileList);
             this.Controls.Add(this.buttonCancel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "FormSTSNN";
             this.Text = "时空聚类-ST-SNN";
             this.groupBoxThreshold.ResumeLayout(false);

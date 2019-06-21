@@ -530,7 +530,7 @@
                     <GroupBox x:Name="ENSOGroupBox" Header="ENSO事件" HorizontalAlignment="Left" Margin="10,254,0,0" VerticalAlignment="Top" Height="242" Width="366" Foreground="#99FFFFFF" BorderBrush="#99FFFFFF">
                         <Grid HorizontalAlignment="Left" Height="239" Margin="0,0,-2,-22" VerticalAlignment="Top" Width="356">
                             <TreeView x:Name="treeENSO" HorizontalAlignment="Left" Width="356" Height="190" VerticalAlignment="Top" MouseDoubleClick="treeENSO_MouseDoubleClick" Background="#002A2A2A" Foreground="White"  FontWeight="Bold"/>
-                            <pu:PUComboBox x:Name="comboBox3" Margin="0,196,260,20" SelectionChanged="comboBox3_SelectionChanged" BorderCornerRadius="3">
+                            <pu:PUComboBox x:Name="comboBox3" Margin="0,196,260,20" SelectionChanged="comboBox3_SelectionChanged" BorderCornerRadius="3" FontSize="10">
                                 <pu:PUComboBox.Background>
                                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                                         <GradientStop Color="#FFF0F0F0" Offset="0"/>

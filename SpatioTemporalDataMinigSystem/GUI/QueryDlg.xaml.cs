@@ -443,9 +443,21 @@ namespace STDMS.GUI
             try
             {
                 Nodes = Neo4j64.QueryNodeDataTable((string)CQL);
-                for(int i = 0; i < Nodes.Count; i++)
+                if (Nodes != null)
                 {
-                    EventGeometries.Add(Nodes[i]["PRID"], Nodes[i]["geometry"]);
+                    for (int i = 0; i < Nodes.Count; i++)
+                    {
+                        EventGeometries.Add(Nodes[i]["PRID"], Nodes[i]["geometry"]);
+                    }
+                }
+                else
+                {
+                    Dispatcher.Invoke(new Action(delegate
+                    {
+                        mainForm.SetProgessVisible(Visibility.Hidden);
+                        PUMessageBox.ShowDialog("未查询到数据！", "提示", Buttons.OK);
+                    }));
+                    return;
                 }
             }
             catch (Exception ex)
@@ -453,9 +465,9 @@ namespace STDMS.GUI
                 Dispatcher.Invoke(new Action(delegate
                 {
                     mainForm.SetProgessVisible(Visibility.Hidden);
-                    PUMessageBox.ShowDialog("查询错误: " + ex.Message, "错误", Buttons.OK);
-                    return;
+                    PUMessageBox.ShowDialog("查询错误: " + ex.Message, "错误", Buttons.OK);                 
                 }));
+                return;
             }
             List<String> Keys = new List<String>();
             Dispatcher.Invoke(new Action(delegate
@@ -919,7 +931,7 @@ namespace STDMS.GUI
                                                 DateTime Before = new DateTime();
                                                 Before = Convert.ToDateTime(strTime);
                                                 Before = Before.AddMonths(-1 * Convert.ToInt16((comboBox2.SelectedValue as PUComboBoxItem).Content.ToString()));
-                                                strTemp += string.Format(strCQL, StartFieldComboBox.SelectedValue, Before.ToString(), Now.ToString()) + " OR ";
+                                                strTemp += string.Format(strCQL, StartFieldComboBox.SelectedValue, Before.ToString().Replace("/", "-"), Now.ToString().Replace("/", "-")) + " OR ";
                                             }
                                         }
                                         strTemp = strTemp.Substring(0, strTemp.Length - 4);
@@ -928,13 +940,13 @@ namespace STDMS.GUI
                                     {
                                         for (int i = 0; i < (treeENSO.SelectedItem as TreeViewItem).Items.Count; i++)
                                         {
-                                            string strTime = (treeENSO.SelectedItem as TreeViewItem).Items[i].ToString().Split('/')[0];
+                                            string strTime = ((treeENSO.SelectedItem as TreeViewItem).Items[i]as TreeViewItem).Header.ToString().Split('/')[0];
                                             DateTime Now = new DateTime();
                                             Now = Convert.ToDateTime(strTime);
                                             DateTime Before = new DateTime();
                                             Before = Convert.ToDateTime(strTime);
                                             Before = Before.AddMonths(-1 * Convert.ToInt16((comboBox2.SelectedItem as PUComboBoxItem).Content.ToString()));
-                                            strTemp += string.Format(strCQL, StartFieldComboBox.SelectedValue, Before.ToString(), Now.ToString()) + " OR ";
+                                            strTemp += string.Format(strCQL, StartFieldComboBox.SelectedValue, Before.ToString().Replace("/", "-"), Now.ToString().Replace("/", "-")) + " OR ";
                                         }
                                         strTemp = strTemp.Substring(0, strTemp.Length - 4);
                                     }
@@ -948,7 +960,7 @@ namespace STDMS.GUI
                                             DateTime Before = new DateTime();
                                             Before = Convert.ToDateTime(strTime);
                                             Before = Before.AddMonths(-1 * Convert.ToInt16((comboBox2.SelectedItem as PUComboBoxItem).Content.ToString()));
-                                           strTemp += string.Format(strCQL, StartFieldComboBox.SelectedValue, Before.ToString(), Now.ToString()) + " OR ";
+                                           strTemp += string.Format(strCQL, StartFieldComboBox.SelectedValue, Before.ToString().Replace("/", "-"), Now.ToString().Replace("/", "-")) + " OR ";
                                         }
                                         strTemp = strTemp.Substring(0, strTemp.Length - 4);
                                     }
@@ -956,11 +968,11 @@ namespace STDMS.GUI
                                     {
                                         string strTime = labelENSO.Content.ToString().Split('/')[0];
                                         DateTime Now = new DateTime();
-                                        Now = Convert.ToDateTime(strTime);
+                                        Now = Convert.ToDateTime(strTime);                                      
                                         DateTime Before = new DateTime();
                                         Before = Convert.ToDateTime(strTime);
-                                        Before = Before.AddMonths(-1 * Convert.ToInt16((comboBox2.SelectedValue as PUComboBoxItem).Content.ToString()));
-                                        strTemp = string.Format(strCQL, StartFieldComboBox.SelectedValue, Before.ToString(), Now.ToString());
+                                        Before = Before.AddMonths(-1 * Convert.ToInt16((comboBox2.SelectedItem as PUComboBoxItem).Content.ToString()));
+                                        strTemp = string.Format(strCQL, StartFieldComboBox.SelectedValue, Before.ToString().Replace("/", "-"), Now.ToString().Replace("/","-"));
                                     }
                                 }
                                 else { CQL = CQL.Substring(0, CQL.Length - 6); }
