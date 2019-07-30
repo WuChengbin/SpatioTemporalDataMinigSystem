@@ -1683,8 +1683,8 @@ namespace STDMS.GUI
                     }
                     else
                     {
-                        bool preIsExpande = (treeArea.SelectedValue as TreeViewItem).IsExpanded;
-                        (treeArea.SelectedValue as TreeViewItem).IsExpanded = !preIsExpande;
+                        bool preIsExpand = (treeArea.SelectedValue as TreeViewItem).IsExpanded;
+                        (treeArea.SelectedValue as TreeViewItem).IsExpanded = !preIsExpand;
                         WKT = Neo4j64.QueryAreaWKT((treeArea.SelectedValue as TreeViewItem).Header.ToString());
 
                         //if ((treeArea.SelectedValue as TreeViewItem).IsExpanded == false)

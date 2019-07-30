@@ -1423,7 +1423,7 @@ namespace STDMS.GUI
                 string SeqSeqCQL = string.Empty;    //创建序列-序列关系
                 string StStCQL = string.Empty;      //创建状态-状态关系
                 const string BelongTemplate = "MATCH(N:{0}),(M:{1}) WHERE N.{2}=M.{3} MERGE(N)-[:{4}]->(M)";
-                const string RelTemplate = "USING PERIODIC COMMIT 1000 LOAD CSV WITH HEADERS FROM \"file:///{0}\" as line match(from: {1}{{{2}: line.FromID}}),match(to: {1}{{{2}: line.TOID}}) merge(from) -[r: SRelationship{{ StateAction: line.property}}]->(to)";
+                const string RelTemplate = "USING PERIODIC COMMIT 1000 LOAD CSV WITH HEADERS FROM \"file:///{0}\" as line match(from: {1}{{{2}: line.FromID}}),match(to: {1}{{{2}: line.ToID}}) merge(from) -[r: SRelationship{{ StateAction: line.property}}]->(to)";
 
 
                 #region 获取控件值以及读取数据
