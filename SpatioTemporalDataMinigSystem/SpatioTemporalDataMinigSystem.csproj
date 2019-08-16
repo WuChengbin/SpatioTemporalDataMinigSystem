@@ -352,6 +352,10 @@
       <Project>{DE8BE98F-11EE-4035-9D9F-F779C26178F1}</Project>
       <Name>ClusterAlgorithm</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MarineSTMiningSystem\MarineSTMiningSystem\MarineSTMiningSystem.csproj">
+      <Project>{5B8AD603-12C1-405B-812D-2EE399679D2C}</Project>
+      <Name>MarineSTMiningSystem</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Esri.ArcGISRuntime.WPF.100.4.0\build\net461\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\packages\Esri.ArcGISRuntime.WPF.100.4.0\build\net461\Esri.ArcGISRuntime.WPF.targets')" />

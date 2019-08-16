@@ -22,6 +22,7 @@ using CefSharp;
 using Esri.ArcGISRuntime.UI.Controls;
 using STDMS.GUI;
 using ClusterAlgorithm.GUI;
+using MarineSTMiningSystem.GUI;
 //using ClusterAlgorithm.GUI;
 
 namespace STDMS
@@ -946,6 +947,27 @@ namespace STDMS
             FormRoSTCM formRoSTCM = new FormRoSTCM();
             formRoSTCM.Show();
             formRoSTCM.TopMost = true;
+        }
+
+        private void PUTreeViewItem_PreviewMouseLeftButtonDown_11(object sender, MouseButtonEventArgs e)
+        {
+            SstTimeExtractForm temp = new SstTimeExtractForm();
+            temp.Show();
+            temp.TopMost = true;
+        }
+
+        private void PUTreeViewItem_PreviewMouseLeftButtonDown_12(object sender, MouseButtonEventArgs e)
+        {
+            SstRestertoVectorExtractInfo temp = new SstRestertoVectorExtractInfo();
+            temp.Show();
+            temp.TopMost = true;
+        }
+
+        private void PUTreeViewItem_PreviewMouseLeftButtonDown_13(object sender, MouseButtonEventArgs e)
+        {
+            SstProcessExtractForm temp = new SstProcessExtractForm();
+            temp.Show();
+            temp.TopMost = true;
         }
     }
 }

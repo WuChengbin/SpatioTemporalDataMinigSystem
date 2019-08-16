@@ -1,0 +1,610 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5B8AD603-12C1-405B-812D-2EE399679D2C}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MarineSTMiningSystem</RootNamespace>
+    <AssemblyName>MarineSTMiningSystem</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ESRI.ArcGIS.3DAnalyst, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>bin\x64\Debug\ESRI.ArcGIS.3DAnalyst.dll</HintPath>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Carto, Version=10.5.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Controls, Version=10.5.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Display, Version=10.5.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Geometry, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>bin\x64\Debug\ESRI.ArcGIS.Geometry.dll</HintPath>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.GlobeCore, Version=10.5.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Output, Version=10.5.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.System, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>bin\x64\Debug\ESRI.ArcGIS.System.dll</HintPath>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.5.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Version, Version=10.5.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86" />
+    <Reference Include="gdalconst_csharp, Version=1.0.6676.37353, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\gdalconst_csharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gdal_csharp, Version=1.0.6676.37353, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x64\Debug\gdal_csharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\百度经纬度区划查询\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ogr_csharp, Version=1.0.6676.37352, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x64\Debug\ogr_csharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess">
+      <HintPath>bin\Debug\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="osr_csharp, Version=1.0.6676.37352, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x64\Debug\osr_csharp.dll</HintPath>
+    </Reference>
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class\CreateGeometryfromWKT.cs" />
+    <Compile Include="Class\GeneralFun.cs" />
+    <Compile Include="Class\Sequence.cs" />
+    <Compile Include="GetFileNamesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetFileNamesForm.Designer.cs">
+      <DependentUpon>GetFileNamesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\EventRelToDatabaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\EventRelToDatabaseForm.Designer.cs">
+      <DependentUpon>EventRelToDatabaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\EventToDatabaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\EventToDatabaseForm.Designer.cs">
+      <DependentUpon>EventToDatabaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\AboutUsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\AboutUsForm.Designer.cs">
+      <DependentUpon>AboutUsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\Circle.cs" />
+    <Compile Include="Class\ClsStormEvent.cs" />
+    <Compile Include="GUI\ClusterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ClusterForm.Designer.cs">
+      <DependentUpon>ClusterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\DatabaseConnection.cs" />
+    <Compile Include="Class\Earth.cs" />
+    <Compile Include="GUI\GetProjectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\GetProjectForm.Designer.cs">
+      <DependentUpon>GetProjectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\HdfToTif.cs" />
+    <Compile Include="GUI\LinkServerDatabaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\LinkServerDatabaseForm.Designer.cs">
+      <DependentUpon>LinkServerDatabaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\MCC.cs" />
+    <Compile Include="Class\MIC.cs" />
+    <Compile Include="GUI\SstEventStateToVectorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SstEventStateToVectorForm.Designer.cs">
+      <DependentUpon>SstEventStateToVectorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SstEventToVectorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SstEventToVectorForm.Designer.cs">
+      <DependentUpon>SstEventToVectorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarineHeatwave.cs" />
+    <Compile Include="MarineHeatwavePolygonList.cs" />
+    <Compile Include="MarineHeatwaveShp.cs" />
+    <Compile Include="GUI\PointValueForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\PointValueForm.Designer.cs">
+      <DependentUpon>PointValueForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SstProcessExtractForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SstProcessExtractForm.Designer.cs">
+      <DependentUpon>SstProcessExtractForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SstRestertoVectorExtractInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SstRestertoVectorExtractInfo.Designer.cs">
+      <DependentUpon>SstRestertoVectorExtractInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SstSpatialExtractForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SstSpatialExtractForm.Designer.cs">
+      <DependentUpon>SstSpatialExtractForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\sstTifToShpBasedSpaceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\sstTifToShpBasedSpaceForm.Designer.cs">
+      <DependentUpon>sstTifToShpBasedSpaceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SstTimeExtractForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SstTimeExtractForm.Designer.cs">
+      <DependentUpon>SstTimeExtractForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\sstTimeExtraction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\StormTITANExtractForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\StormTITANExtractForm.Designer.cs">
+      <DependentUpon>StormTITANExtractForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\OutToTxtForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\OutToTxtForm.Designer.cs">
+      <DependentUpon>OutToTxtForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarineHeatwaveLine.cs" />
+    <Compile Include="MarineHeatwavePoint.cs" />
+    <Compile Include="MarineHeatwaves90PercentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MarineHeatwaves90PercentForm.Designer.cs">
+      <DependentUpon>MarineHeatwaves90PercentForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarineHeatwavesAverageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MarineHeatwavesAverageForm.Designer.cs">
+      <DependentUpon>MarineHeatwavesAverageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarineHeatwavesMedianForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MarineHeatwavesMedianForm.Designer.cs">
+      <DependentUpon>MarineHeatwavesMedianForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarineHeatwavePolygon.cs" />
+    <Compile Include="MarineHeatwavesSpaceExtractionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MarineHeatwavesSpaceExtractionForm.Designer.cs">
+      <DependentUpon>MarineHeatwavesSpaceExtractionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarineHeatwavesTime2ExtractionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MarineHeatwavesTime2ExtractionForm.Designer.cs">
+      <DependentUpon>MarineHeatwavesTime2ExtractionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarineHeatwavesTimeAnomalyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MarineHeatwavesTimeAnomalyForm.Designer.cs">
+      <DependentUpon>MarineHeatwavesTimeAnomalyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarineHeatwavesTimeExtractionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MarineHeatwavesTimeExtractionForm.Designer.cs">
+      <DependentUpon>MarineHeatwavesTimeExtractionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarineHeatwavesTrackingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MarineHeatwavesTrackingForm.Designer.cs">
+      <DependentUpon>MarineHeatwavesTrackingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OscarConvertionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OscarConvertionForm.Designer.cs">
+      <DependentUpon>OscarConvertionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Class\Rectangle.cs" />
+    <Compile Include="Class\ResterToVector.cs" />
+    <Compile Include="Class\Shp.cs" />
+    <Compile Include="Class\Storm.cs" />
+    <Compile Include="GUI\StormDatabaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\StormDatabaseForm.Designer.cs">
+      <DependentUpon>StormDatabaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StormEventStateToVectorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\StormEventStateToVectorForm.Designer.cs">
+      <DependentUpon>StormEventStateToVectorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StormEventToVectorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\StormEventToVectorForm.Designer.cs">
+      <DependentUpon>StormEventToVectorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\StormFeature.cs" />
+    <Compile Include="Class\StormLine.cs" />
+    <Compile Include="Class\StormList.cs" />
+    <Compile Include="Class\StormPoint.cs" />
+    <Compile Include="GUI\StormNumberExtractForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\StormNumberExtractForm.Designer.cs">
+      <DependentUpon>StormNumberExtractForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\StormPolygon.cs" />
+    <Compile Include="Class\StormPolygonList.cs" />
+    <Compile Include="GUI\StormProcessExtractForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\StormProcessExtractForm.Designer.cs">
+      <DependentUpon>StormProcessExtractForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StormRasterExtractForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\StormRasterExtractForm.Designer.cs">
+      <DependentUpon>StormRasterExtractForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\StormShp.cs" />
+    <Compile Include="GUI\StormSpatialExtractForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\StormSpatialExtractForm.Designer.cs">
+      <DependentUpon>StormSpatialExtractForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StormTimeExtractForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\StormTimeExtractForm.Designer.cs">
+      <DependentUpon>StormTimeExtractForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StromEventExtractionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\StromEventExtractionForm.Designer.cs">
+      <DependentUpon>StromEventExtractionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\TifToShpBasedSpaceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\TifToShpBasedSpaceForm.Designer.cs">
+      <DependentUpon>TifToShpBasedSpaceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\TifToShpForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\TifToShpForm.Designer.cs">
+      <DependentUpon>TifToShpForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\YMatrix.cs" />
+    <Compile Include="Class\ZMatrix.cs" />
+    <Compile Include="GUI\ShpToDatabaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ShpToDatabaseForm.Designer.cs">
+      <DependentUpon>ShpToDatabaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StormMoNiForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\StormMoNiForm.Designer.cs">
+      <DependentUpon>StormMoNiForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\RandomDistribution.cs" />
+    <Compile Include="SSTDataAverageConvertionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SSTDataAverageConvertionForm.Designer.cs">
+      <DependentUpon>SSTDataAverageConvertionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SSTDataConvertion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SSTDataConvertion.Designer.cs">
+      <DependentUpon>SSTDataConvertion.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="GetFileNamesForm.resx">
+      <DependentUpon>GetFileNamesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\EventRelToDatabaseForm.resx">
+      <DependentUpon>EventRelToDatabaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\EventToDatabaseForm.resx">
+      <DependentUpon>EventToDatabaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\AboutUsForm.resx">
+      <DependentUpon>AboutUsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ClusterForm.resx">
+      <DependentUpon>ClusterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\GetProjectForm.resx">
+      <DependentUpon>GetProjectForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\LinkServerDatabaseForm.resx">
+      <DependentUpon>LinkServerDatabaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\PointValueForm.resx">
+      <DependentUpon>PointValueForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SstEventStateToVectorForm.resx">
+      <DependentUpon>SstEventStateToVectorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SstEventToVectorForm.resx">
+      <DependentUpon>SstEventToVectorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SstProcessExtractForm.resx">
+      <DependentUpon>SstProcessExtractForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SstRestertoVectorExtractInfo.resx">
+      <DependentUpon>SstRestertoVectorExtractInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SstSpatialExtractForm.resx">
+      <DependentUpon>SstSpatialExtractForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\sstTifToShpBasedSpaceForm.resx">
+      <DependentUpon>sstTifToShpBasedSpaceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SstTimeExtractForm.resx">
+      <DependentUpon>SstTimeExtractForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\StormTITANExtractForm.resx">
+      <DependentUpon>StormTITANExtractForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\OutToTxtForm.resx">
+      <DependentUpon>OutToTxtForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarineHeatwaves90PercentForm.resx">
+      <DependentUpon>MarineHeatwaves90PercentForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarineHeatwavesAverageForm.resx">
+      <DependentUpon>MarineHeatwavesAverageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarineHeatwavesMedianForm.resx">
+      <DependentUpon>MarineHeatwavesMedianForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarineHeatwavesSpaceExtractionForm.resx">
+      <DependentUpon>MarineHeatwavesSpaceExtractionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarineHeatwavesTime2ExtractionForm.resx">
+      <DependentUpon>MarineHeatwavesTime2ExtractionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarineHeatwavesTimeAnomalyForm.resx">
+      <DependentUpon>MarineHeatwavesTimeAnomalyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarineHeatwavesTimeExtractionForm.resx">
+      <DependentUpon>MarineHeatwavesTimeExtractionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarineHeatwavesTrackingForm.resx">
+      <DependentUpon>MarineHeatwavesTrackingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OscarConvertionForm.resx">
+      <DependentUpon>OscarConvertionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="GUI\StormDatabaseForm.resx">
+      <DependentUpon>StormDatabaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\StormEventStateToVectorForm.resx">
+      <DependentUpon>StormEventStateToVectorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\StormEventToVectorForm.resx">
+      <DependentUpon>StormEventToVectorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\StormNumberExtractForm.resx">
+      <DependentUpon>StormNumberExtractForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\StormProcessExtractForm.resx">
+      <DependentUpon>StormProcessExtractForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\StormRasterExtractForm.resx">
+      <DependentUpon>StormRasterExtractForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\StormSpatialExtractForm.resx">
+      <DependentUpon>StormSpatialExtractForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\StormTimeExtractForm.resx">
+      <DependentUpon>StormTimeExtractForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\StromEventExtractionForm.resx">
+      <DependentUpon>StromEventExtractionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\TifToShpBasedSpaceForm.resx">
+      <DependentUpon>TifToShpBasedSpaceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\TifToShpForm.resx">
+      <DependentUpon>TifToShpForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ShpToDatabaseForm.resx">
+      <DependentUpon>ShpToDatabaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\StormMoNiForm.resx">
+      <DependentUpon>StormMoNiForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SSTDataAverageConvertionForm.resx">
+      <DependentUpon>SSTDataAverageConvertionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SSTDataConvertion.resx">
+      <DependentUpon>SSTDataConvertion.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

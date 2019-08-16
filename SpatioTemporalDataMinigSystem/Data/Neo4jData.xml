@@ -27,7 +27,7 @@
   <Field NAME="Area" DataType="DOUBLE" Chinese="面积"></Field>
   <Field NAME="MaxArea" DataType="DOUBLE" Chinese="最大面积"></Field>
   <Field NAME="SumArea" DataType="DOUBLE" Chinese="总面积"></Field>
-  <Field NAME="AbnormalType" DataType="STRING" Chinese="异常类型"></Field>
+  <Field NAME="Abnormal" DataType="STRING" Chinese="异常类型"></Field>
   <Field NAME="StateType" DataType="INT" Chinese="状态类型"></Field>
   <Field NAME="ParentsID" DataType="STRING" Chinese="父节点"></Field>
   <Field NAME="ChildrenID" DataType="STRING" Chinese="子节点"></Field>

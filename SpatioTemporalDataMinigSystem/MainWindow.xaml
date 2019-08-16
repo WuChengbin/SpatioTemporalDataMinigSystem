@@ -67,6 +67,13 @@
             <pu:PUTreeViewItem Header="时空信息提取" Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
                 <pu:PUTreeViewItem Header="暴雨事件"></pu:PUTreeViewItem>
                 <pu:PUTreeViewItem Header="海洋热浪"></pu:PUTreeViewItem>
+                <pu:PUTreeViewItem Header="海表温度">
+                    <pu:PUTreeView  Foreground="#A5FFFFFF" CoverBrush="#3352B1DD" ChoosedBrush="#2F52B1DD" FontWeight="Bold" Width="250">
+                        <pu:PUTreeViewItem Header="时间维度提取" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_11"></pu:PUTreeViewItem>
+                        <pu:PUTreeViewItem Header="矢量化对象提取" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_12"></pu:PUTreeViewItem>
+                        <pu:PUTreeViewItem Header="过程追踪" PreviewMouseLeftButtonDown="PUTreeViewItem_PreviewMouseLeftButtonDown_13"></pu:PUTreeViewItem>
+                    </pu:PUTreeView>
+                </pu:PUTreeViewItem>
             </pu:PUTreeViewItem>
             <pu:PUTreeViewItem Header="时空异常探测" Width="239" HorizontalAlignment="Left" Background="#FF3A8FC8" BorderThickness="0,0,0,2" BorderBrush="#FF1E74A3">
             </pu:PUTreeViewItem>

@@ -1727,6 +1727,10 @@ namespace STDMS.GUI
             {
                 this.IsAwaitShow = true;             
             }
+            else
+            {
+                return;
+            }
             Thread t = new Thread(() =>
             {
                 int index = -1;
@@ -1767,6 +1771,7 @@ namespace STDMS.GUI
                         Dispatcher.Invoke(new Action(delegate
                         {
                             NodeLabel.Text = "";
+                            LabelBubble.Visibility = Visibility.Visible;
                         }));
                     }
                 }
@@ -1775,7 +1780,7 @@ namespace STDMS.GUI
                     Dispatcher.Invoke(new Action(delegate
                     {
                         NodeLabel.Text = "";
-                        LabelBubble.Visibility = Visibility.Hidden;
+                        LabelBubble.Visibility = Visibility.Visible;
                     }));
                 }
                 Dispatcher.Invoke(new Action(delegate
