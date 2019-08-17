@@ -707,6 +707,10 @@ namespace STDMS.GUI
         {
             if (EventLabelComboBox.SelectedIndex == -1) EventLabelComboBox.SelectedIndex = 0;
             if (EventIDComboBox.SelectedIndex == -1) EventIDComboBox.SelectedIndex = 0;
+            for (int i = EventLabelComboBox.Items.Count - 1; i > 0; i--)
+            {
+                EventLabelComboBox.Items.RemoveAt(i);
+            }
             if (Neo4j64.isConnected && EventLabelComboBox.Items.Count == 1)
             {
                 List<string> Event = new List<string>();
@@ -742,6 +746,10 @@ namespace STDMS.GUI
         {
             if (SeqLabelComboBox.SelectedIndex == -1) SeqLabelComboBox.SelectedIndex = 0;
             if (SeqIDComboBox.SelectedIndex == -1) SeqIDComboBox.SelectedIndex = 0;
+            for(int i = SeqLabelComboBox.Items.Count - 1; i > 0; i--)
+            {
+                SeqLabelComboBox.Items.RemoveAt(i);
+            }
             if (Neo4j64.isConnected && SeqLabelComboBox.Items.Count == 1)
             {
                 List<string> Seq = new List<string>();
@@ -777,6 +785,10 @@ namespace STDMS.GUI
         {
             if (StLabelComboBox.SelectedIndex == -1) StLabelComboBox.SelectedIndex = 0;
             if (StIDComboBox.SelectedIndex == -1) StIDComboBox.SelectedIndex = 0;
+            for (int i = StLabelComboBox.Items.Count - 1; i > 0; i--)
+            {
+                StLabelComboBox.Items.RemoveAt(i);
+            }
             if (Neo4j64.isConnected && StLabelComboBox.Items.Count == 1)
             {
                 List<string> State = new List<string>();
@@ -859,7 +871,7 @@ namespace STDMS.GUI
             }
             if (ProcessTab.SelectedIndex == 2)
             {
-                //
+                
             }
             if (ProcessTab.SelectedIndex == 3)
             {
@@ -2065,7 +2077,8 @@ namespace STDMS.GUI
             {
                 CreateBtn.Content = "删除用户";
                 SuspendBtn.Visibility = Visibility.Visible;
-                if (UserInfo[UserComboBox.SelectedValue.ToString()]["flags"] == "暂停使用")
+                if (UserComboBox.SelectedValue.ToString()!=""
+                    &&UserInfo[UserComboBox.SelectedValue.ToString()]["flags"] == "暂停使用")
                 {
                     SuspendBtn.Content = "激活";
                 }
@@ -2489,6 +2502,7 @@ namespace STDMS.GUI
                         Dispatcher.Invoke(new Action(delegate
                         {
                             IncreamentProgressBar.Visibility = Visibility.Hidden;
+                            IncreamentProgressBar.Percent = 0;
                             PUMessageBox.ShowDialog(ex.Message);
                             return;
                         }));
@@ -2514,6 +2528,7 @@ namespace STDMS.GUI
                                 Dispatcher.Invoke(new Action(delegate
                                 {
                                     IncreamentProgressBar.Visibility = Visibility.Hidden;
+                                    IncreamentProgressBar.Percent = 0;
                                     PUMessageBox.ShowDialog(ex.Message);
                                     return;
                                 }));
@@ -2554,6 +2569,7 @@ namespace STDMS.GUI
                     {
                         ShpProgressLabel.Content = "";
                         IncreamentProgressBar.Visibility = Visibility.Hidden;
+                        IncreamentProgressBar.Percent = 0;
                         dataTableLayer.Rows.Clear();
                         UpdateLayerInfo();
                         PUMessageBox.ShowDialog("导入完成！");                        
